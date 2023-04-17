@@ -4,17 +4,20 @@ class ProductManager {
     }
 
     addProduct(product) {
-        if(this.products.length >= 0){
-            const code = this.products.find(p => p.code === product.code)
-            if(code) {
-                console.log('Ya existe el codigo de producto')
-                return
+        if(product.title && product.description && product.price && product.thumbnail && product.code && product.stock) {
+            if(this.products.length > 0){
+                const code = this.products.find(p => p.code === product.code)
+                if(code) {
+                    return 'Ya existe el codigo de producto'
+                }
+                product.id = this.products.length + 1
+                this.products.push(product)
+            } else {
+                product.id = 1
+                this.products.push(product)
             }
-            product.id = this.products.length + 1
-            this.products.push(product)
         } else {
-            product.id = 0
-            this.products.push(product)
+            return 'Debe completar todos los campos'
         }
     }
 
