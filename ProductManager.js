@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { json } = require('stream/consumers')
 
 class ProductManager {
     constructor (path) {
@@ -22,19 +23,21 @@ class ProductManager {
         if(product.title && product.description && product.price && product.thumbnail && product.code && product.stock) {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const products = await JSON.parse(data);
-
             if(products.length > 0){
                 const code = products.find(p => p.code === product.code)
                 if(code) {
+                    console.log('Ya existe el codigo de producto')
                     return 'Ya existe el codigo de producto'
                 }
-
+                
                 product.id = await this.nextID()
                 products.push(product)
                 await fs.promises.writeFile(this.path, JSON.stringify(products))
             } else {
-                product.id = 0
+                product.id = 1
                 products.push(product)
+                await fs.promises.writeFile(this.path, JSON.stringify(products))
+                console.log('Producto agregado satisfactoriamente')
             }
         } else {
             return 'Debe completar todos los campos'
@@ -58,15 +61,17 @@ class ProductManager {
         }
     }
 
-    async updateProduct(product) {
+    async updateProduct(id, product) {
         const data = await fs.promises.readFile(this.path, 'utf-8')
         const products = await JSON.parse(data)
-        const productsToUpdate = products.filter(p => p.id !== product.id)
-        const newProducts = [...productsToUpdate, product]
+        const productsToUpdate = products.filter(p => p.id !== id)
+        const productUpdate = {...product, id}
+        const newProducts = [...productsToUpdate, productUpdate]
         newProducts.sort((a, b) => {
             return a.id - b.id;
         });
         await fs.promises.writeFile(this.path, JSON.stringify(newProducts))
+        console.log('Producto actualizado')
     }
 
     async deleteProduct(id) {
@@ -74,6 +79,7 @@ class ProductManager {
         const products = await JSON.parse(data)
         const newProducts = products.filter(p => p.id !== id)
         await fs.promises.writeFile(this.path, JSON.stringify(newProducts))
+        console.log('Producto eliminado')
     }
 }
 
@@ -81,66 +87,30 @@ const productManager = new ProductManager('./products.txt')
 
 // productManager.getProducts()
 
-const product1 = {
-    title: 'producto1',
-    description: 'xxxxxxxxxxxx',
-    price: 1200,
-    thumbnail: 'htpp://xxxxxxxxxxxxx',
-    code: 'asfk2223kkk',
-    stock: 100
-}
-
-const product2 = {
-    title: 'producto2',
-    description: 'yyyyyyyyyyyyyy',
-    price: 5000,
-    thumbnail: 'htpp://yyyyyyyyyyyyy',
-    code: 'sdfskjdhf11111',
-    stock: 80
-}
-
-const product3 = {
-    title: 'producto3',
-    description: 'zzzzzzzzzzzzzzz',
-    price: 300,
-    thumbnail: 'htpp://zzzzzzzzzzzzzzzzzzzz',
-    code: 'sdkjhdgkjhs223r555',
-    stock: 50
-}
-
-// productManager.addProduct(product1)
-productManager.addProduct(product2)
-// productManager.addProduct(product3)
+// productManager.addProduct({
+//     "title": 'producto prueba',
+//     "description": 'Este es un producto prueba',
+//     "price": 200,
+//     "thumbnail": 'Sin imagen',
+//     "code": 'abc123',
+//     "stock":25
+// })
 
 // productManager.getProducts()
 
-const product4 = {
-    title: 'producto4',
-    description: 'zzzzzzzzzzzzzzz',
-    price: 300,
-    thumbnail: 'htpp://zzzzzzzzzzzzzzzzzzzz',
-    code: 'sdkjhdgkjhs223r555',
-    stock: 50
-}
+// productManager.getProductById(1)
 
-// productManager.addProduct(product4)
-
-// productManager.getProductById(2)
-
-const productToUpdate = {
-    title: 'producto2 actualizado',
-    description: 'ththththththth',
-    price: 5000,
-    thumbnail: 'htpp://yyyyyyyyyyyyy',
-    code: 'sdfskjdhf11111',
-    stock: 80,
-    id: 2
-}
-
-// productManager.updateProduct(productToUpdate)
+// productManager.updateProduct(1, {
+//     "title": 'producto prueba',
+//     "description": 'Este es un producto prueba',
+//     "price": 10000,
+//     "thumbnail": 'Sin imagen',
+//     "code": 'abc123',
+//     "stock":25
+// })
 
 // productManager.getProducts()
 
-// productManager.deleteProduct(2)
+// productManager.deleteProduct(1)
 
 // productManager.getProducts()
