@@ -31,6 +31,7 @@ class ProductManager {
                 } else {
                     product.id = 1
                     products.push(product)
+                    await fs.promises.writeFile(this.path, JSON.stringify(products))
                 }
             } else {
                 return 'Debe completar todos los campos'
@@ -67,13 +68,12 @@ class ProductManager {
 
     async updateProduct(id, updates) {
         try {
-            const data = await fs.promises.readFile(this.path, 'utf-8')     // Leo el archivo
-            const products = await JSON.parse(data)                         // Parso la data
-            const oldProduct = products.filter(prod => prod.id === id)      // Busco el producto a eliminar
-            const productsFilter = products.filter(prod => prod.id !== id)  // Elimino el producto del array
-            const newProduct = { ...oldProduct, updates }                   // Actualizo las propiedades del producto
-            const newProducts = [ ...productsFilter, newProduct]            // Agrego el producto actualizado nuevamente al array
-            await fs.promises.writeFile(this.path, JSON.stringify(newProducts))
+            const data = await fs.promises.readFile(this.path, 'utf-8')
+            const products = await JSON.parse(data)
+            const oldProduct = products.find(prod => prod.id === id)
+            const newProduct = { ...oldProduct, ...updates }
+            products[id - 1] = newProduct
+            await fs.promises.writeFile(this.path, JSON.stringify(products))
             return 'Productos actualizado'
         } catch (error) {
             console.log(error)
@@ -95,68 +95,37 @@ class ProductManager {
 
 const productManager = new ProductManager('./products.txt')
 
-// productManager.getProducts()
-
-const product1 = {
-    title: 'producto1',
-    description: 'xxxxxxxxxxxx',
-    price: 1200,
-    thumbnail: 'htpp://xxxxxxxxxxxxx',
-    code: 'asfk2223kkk',
-    stock: 100
+const  verProductos = async () => {
+    const productos = await productManager.getProducts()
+    console.log(productos)
 }
 
-const product2 = {
-    title: 'producto2',
-    description: 'yyyyyyyyyyyyyy',
-    price: 5000,
-    thumbnail: 'htpp://yyyyyyyyyyyyy',
-    code: 'sdfskjdhf11111',
-    stock: 80
+// verProductos()
+
+// productManager.addProduct({
+//     "title": 'producto prueba2',
+//     "description": 'Este es un producto prueba',
+//     "price": 200,
+//     "thumbnail": 'Sin imagen',
+//     "code": 'abc124',
+//     "stock":25
+// })
+
+//  verProductos()
+
+const productoPorId = async (id) => {
+    const producto = await productManager.getProductById(id)
+    console.log(producto)
 }
 
-const product3 = {
-    title: 'producto3',
-    description: 'zzzzzzzzzzzzzzz',
-    price: 300,
-    thumbnail: 'htpp://zzzzzzzzzzzzzzzzzzzz',
-    code: 'sdkjhdgkjhs223r555',
-    stock: 50
-}
+// productoPorId(1)
 
-// productManager.addProduct(product1)
-// productManager.addProduct(product2)
-// productManager.addProduct(product3)
+// productManager.updateProduct(2, {
+//     "thumbnail": "asdasdasd",
+// })
 
-// productManager.getProducts()
+//  verProductos()
 
-const product4 = {
-    title: 'producto4',
-    description: 'zzzzzzzzzzzzzzz',
-    price: 300,
-    thumbnail: 'htpp://zzzzzzzzzzzzzzzzzzzz',
-    code: 'sdkjhdgkjhs223r555',
-    stock: 50
-}
+ productManager.deleteProduct(1)
 
-// productManager.addProduct(product4)
-
-// productManager.getProductById(2)
-
-const productToUpdate = {
-    title: 'producto2 actualizado',
-    description: 'ththththththth',
-    price: 5000,
-    thumbnail: 'htpp://yyyyyyyyyyyyy',
-    code: 'sdfskjdhf11111',
-    stock: 80,
-    id: 2
-}
-
-// productManager.updateProduct(productToUpdate)
-
-// productManager.getProducts()
-
-// productManager.deleteProduct(2)
-
-// productManager.getProducts()
+// verProductos()
