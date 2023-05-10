@@ -39,13 +39,19 @@ productsRouter.put('/:pid', async (req, res) => {
     const updates = req.body
     console.log(updates)
     const resp = await manager.updateProduct(id, updates)
-    res.send(resp)
+    res.send({
+        "status": "success",
+        "message": resp
+    })
 })
 
 productsRouter.delete('/:pid', async (req, res) => {
     const id = parseInt(req.params.pid)
     const resp = await manager.deleteProduct(id)
-    res.send(resp)
+    res.send({
+        "status": "success",
+        "message": resp
+    })
 })
 
 export default productsRouter
