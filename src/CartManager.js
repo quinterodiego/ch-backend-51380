@@ -43,9 +43,9 @@ class CartsManager {
         try {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const carts = await JSON.parse(data)
-            const cartFinded = carts.find(cart =>  cart.id === id)
+            const cartFinded = carts.find(cart =>  cart.id == id)
             if (cartFinded) {
-                return cartFinded
+                return cartFinded.products
             } else {
                 return null
             }
