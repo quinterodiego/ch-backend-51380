@@ -59,7 +59,6 @@ class CartsManager {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const carts = await JSON.parse(data)
             const oldCart = carts.filter(c => c.id == idCart)
-            console.log(oldCart[0].products)
             oldCart[0].products.push({
                 id: idProduct,
                 quantity: parseInt(quantity)
