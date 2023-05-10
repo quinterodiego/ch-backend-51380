@@ -59,10 +59,16 @@ class CartsManager {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const carts = await JSON.parse(data)
             const oldCart = carts.filter(c => c.id == idCart)
-            oldCart[0].products.push({
-                id: idProduct,
-                quantity: parseInt(quantity)
-            })
+            const productExist = oldCart[0].products.find(product =>  product.id == idProduct)
+            if(productExist) {
+                const index = oldCart[0].products.findIndex(product =>  product.id == idProduct)
+                oldCart[0].products[index].quantity = oldCart[0].products[index].quantity + quantity
+            } else {
+                oldCart[0].products.push({
+                    id: idProduct,
+                    quantity: parseInt(quantity)
+                })
+            }
             carts[idCart - 1] = oldCart[0]
             await fs.promises.writeFile(this.path, JSON.stringify(carts))
             return 'Producto agregado'
