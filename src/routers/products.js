@@ -22,7 +22,7 @@ productsRouter.get('/', async (req, res) => {
 })
 
 productsRouter.get('/:pid', async (req, res) => {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.pid)
     const product = await manager.getProductById(id)
     if(product) {
         res.send({ 
@@ -35,7 +35,7 @@ productsRouter.get('/:pid', async (req, res) => {
 })
 
 productsRouter.put('/:pid', async (req, res) => {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.pid)
     const updates = req.body
     console.log(updates)
     const resp = await manager.updateProduct(id, updates)
@@ -43,7 +43,7 @@ productsRouter.put('/:pid', async (req, res) => {
 })
 
 productsRouter.delete('/:pid', async (req, res) => {
-    const id = parseInt(req.params.id)
+    const id = parseInt(req.params.pid)
     const resp = await manager.deleteProduct(id)
     res.send(resp)
 })
