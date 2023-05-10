@@ -12,4 +12,13 @@ cartsRouter.post('/', async (req, res) => {
     })
 })
 
+cartsRouter.get('/:cid', async (req, res) => {
+    const id = parseInt(req.params.cid)
+    const resp = await manager.getProductsById(id)
+    res.send({
+        "status": "succes",
+        "payload": resp
+    })
+})
+
 export default cartsRouter

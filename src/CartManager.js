@@ -38,6 +38,21 @@ class CartsManager {
             console.log(error)
         }
     }
+
+    async getProductsById(id) {
+        try {
+            const data = await fs.promises.readFile(this.path, 'utf-8')
+            const carts = await JSON.parse(data)
+            const cartFinded = carts.find(cart =>  cart.id === id)
+            if (cartFinded) {
+                return cartFinded
+            } else {
+                return null
+            }
+        } catch (error) {
+            
+        }
+    }
 }
 
 export default CartsManager
