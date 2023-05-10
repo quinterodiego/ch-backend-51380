@@ -1,6 +1,6 @@
-const fs = require('fs')
+import fs from 'fs'
 
-class ProductManager {
+class ProductsManager {
     constructor (path) {
         this.path = path
     }
@@ -15,7 +15,7 @@ class ProductManager {
 
     async addProduct(product) {
         try {
-            if(product.title && product.description && product.price && product.thumbnail && product.code && product.stock) {
+            if(product.title && product.description && product.price && product.thumbnail && product.code && product.stock && product.category) {
                 const data = await fs.promises.readFile(this.path, 'utf-8')
                 const products = await JSON.parse(data);
     
@@ -26,10 +26,12 @@ class ProductManager {
                     }
     
                     product.id = await this.nextID()
+                    product.status = true
                     products.push(product)
                     await fs.promises.writeFile(this.path, JSON.stringify(products))
                 } else {
                     product.id = 1
+                    product.status = true
                     products.push(product)
                     await fs.promises.writeFile(this.path, JSON.stringify(products))
                 }
@@ -74,7 +76,7 @@ class ProductManager {
             const newProduct = { ...oldProduct, ...updates }
             products[id - 1] = newProduct
             await fs.promises.writeFile(this.path, JSON.stringify(products))
-            return 'Productos actualizado'
+            return 'Producto actualizado'
         } catch (error) {
             console.log(error)
         }
@@ -93,4 +95,4 @@ class ProductManager {
     }
 }
 
-module.exports = ProductManager
+export default ProductsManager
