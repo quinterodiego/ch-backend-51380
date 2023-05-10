@@ -54,7 +54,7 @@ class CartsManager {
         }
     }
 
-    async addProductToCart(idCart, idProduct, quantity) {
+    async addProductToCart(idCart, idProduct) {
         try {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const carts = await JSON.parse(data)
@@ -62,11 +62,11 @@ class CartsManager {
             const productExist = oldCart[0].products.find(product =>  product.id == idProduct)
             if(productExist) {
                 const index = oldCart[0].products.findIndex(product =>  product.id == idProduct)
-                oldCart[0].products[index].quantity = oldCart[0].products[index].quantity + quantity
+                oldCart[0].products[index].quantity++
             } else {
                 oldCart[0].products.push({
                     id: idProduct,
-                    quantity: parseInt(quantity)
+                    quantity: 1
                 })
             }
             carts[idCart - 1] = oldCart[0]
