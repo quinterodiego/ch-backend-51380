@@ -28,4 +28,15 @@ cartsRouter.get('/:cid', async (req, res) => {
     })
 })
 
+cartsRouter.post('/:cid/product/:pid', async (req, res) => {
+    const idCart = parseInt(req.params.cid)
+    const idProduct = parseInt(req.params.pid)
+    const { quantity } = req.query
+    const resp = await manager.addProductToCart(idCart, idProduct, quantity)
+    res.send({
+        "status": "success",
+        "message": resp
+    })
+})
+
 export default cartsRouter
