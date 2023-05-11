@@ -8,7 +8,7 @@ const managerProducts = new ProductsManager('./src/db/products.json')
 
 cartsRouter.post('/', async (req, res) => {
     const resp = await manager.createCart()
-    res.send({
+    res.status(201).send({
         "status": "success",
         "message": resp 
     })
@@ -22,7 +22,7 @@ cartsRouter.get('/:cid', async (req, res) => {
         return allProducts.filter(prd => prd.id == prod.id)
     })
     console.log(products)
-    res.send({
+    res.status(200).send({
         "status": "succes",
         "payload": products
     })
@@ -32,7 +32,7 @@ cartsRouter.post('/:cid/product/:pid', async (req, res) => {
     const idCart = parseInt(req.params.cid)
     const idProduct = parseInt(req.params.pid)
     const resp = await manager.addProductToCart(idCart, idProduct)
-    res.send({
+    res.status(201).send({
         "status": "success",
         "message": resp
     })
