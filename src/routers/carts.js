@@ -17,14 +17,9 @@ cartsRouter.post('/', async (req, res) => {
 cartsRouter.get('/:cid', async (req, res) => {
     const id = parseInt(req.params.cid)
     const resp = await manager.getProductsById(id)
-    const allProducts = await managerProducts.getProducts()
-    const products =  resp.map(prod => {
-        return allProducts.filter(prd => prd.id == prod.id)
-    })
-    console.log(products)
     res.status(200).send({
         "status": "succes",
-        "payload": products
+        "payload": resp
     })
 })
 
