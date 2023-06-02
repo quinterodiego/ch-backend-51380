@@ -1,11 +1,10 @@
 import Router from 'express'
-import ProductsManager from '../ProductManager.js'
+import {ProductModel} from './../dao/models/mongoDB/products.js'
 
 const productsRouter = Router()
-const manager = new ProductsManager('./src/db/products.json')
 
 productsRouter.get('/', async (req, res) => {
-    const products = await manager.getProducts()
+    const products = await ProductModel.find()
     const { limit } = req.query
     if(limit) {
         const productsLimit = products.splice(0, parseInt(limit))
@@ -22,8 +21,8 @@ productsRouter.get('/', async (req, res) => {
 })
 
 productsRouter.get('/:pid', async (req, res) => {
-    const id = parseInt(req.params.pid)
-    const product = await manager.getProductById(id)
+    const id = req.params.pid
+    const product = await ProductModel.findOne({_id: id})
     if(product) {
         res.status(200).send({ 
             "status": "success",
@@ -36,7 +35,7 @@ productsRouter.get('/:pid', async (req, res) => {
 
 productsRouter.post('/', async (req, res) => {
     const product = req.body
-    const resp = await manager.addProduct(product)
+    const resp = await ProductModel.create(product)
     res.status(200).send({
         "status": "success",
         "message": resp
@@ -44,10 +43,9 @@ productsRouter.post('/', async (req, res) => {
 })
 
 productsRouter.put('/:pid', async (req, res) => {
-    const id = parseInt(req.params.pid)
+    const id = req.params.pid
     const updates = req.body
-    console.log(updates)
-    const resp = await manager.updateProduct(id, updates)
+    const resp = await ProductModel.updateOne({ _id: id }, {$set: updates});
     res.status(201).send({
         "status": "success",
         "message": resp
@@ -55,8 +53,8 @@ productsRouter.put('/:pid', async (req, res) => {
 })
 
 productsRouter.delete('/:pid', async (req, res) => {
-    const id = parseInt(req.params.pid)
-    const resp = await manager.deleteProduct(id)
+    const id = req.params.pid
+    const resp = await ProductModel.deleteOne({ _id: id})
     res.status(200).send({
         "status": "success",
         "message": resp
