@@ -6,7 +6,7 @@ import productsRouter from './routers/products.js'
 import cartsRouter from './routers/carts.js'
 import messagesRouter from './routers/messages.js'
 import connectMongoDB from './db/mongoDB/config.js'
-import path from 'path'
+import { MessageModel } from './dao/models/mongoDB/messages.js'
 
 const app = express()
 const PORT = 8080
@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
-app.use('/api/messages', messagesRouter)
+app.use('/api/chat', messagesRouter)
 
 app.get('/home', async (req, res) => {
     const data = await fetch('http://localhost:8080/api/products')
@@ -51,7 +51,7 @@ io.on('connection', async (socket) => {
 
     const products = await fetch('http://localhost:8080/api/products')
 
-    socket.emit('products', products)
+    //socket.emit('products', products)
 
     socket.on('newProduct', async data => {
         // await productsManager.addProduct(data)
@@ -64,11 +64,11 @@ io.on('connection', async (socket) => {
         io.sockets.emit('products', products)
     })
 
-    const messages = await fetch('http://localhost:8080/api/messages')
+    const messages = await MessageModel.find()
+    console.log(messages)
     socket.emit('messages', messages)
 
     socket.on('newMessage', async data => {
-        console.log(data)
         await fetch('http://localhost:8080/api/messages', {
             headers: {
                 'Accept': 'application/json',

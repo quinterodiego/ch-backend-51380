@@ -26,28 +26,8 @@ const deleteProduct = (id) => {
     socket.emit('delete', id)
 }
 
-const renderMessages = (data) => {
-    const html = data.map((message) => {
-        return (`
-        <p>${message.user}</p>
-        `)
-    }).join('');
-    document.getElementById('chat').innerHTML = html;
-}
-
-const formMessage = document.getElementById('formMessage')
-formMessage.onsubmit = e => {
-    e.preventDefault()
-    const message = {
-        user: document.getElementById('email'),
-        message: document.getElementById('message')
-    }
-
-    socket.emit('newMessage', message)
-    formMessage.reset()
-}
-
 const formProducts = document.getElementById('form-products');
+
 formProducts.onsubmit = e => {
     e.preventDefault();
     const product = {
@@ -66,9 +46,4 @@ formProducts.onsubmit = e => {
 
 socket.on('products', (data) => {
     renderProducts(data);
-})
-
-
-socket.on('messages', (data) => {
-    renderMessages(data)
 })

@@ -4,11 +4,11 @@
     <form class="m-auto" id="formMessage">
         <div class="mb-3">
             <label for="user" class="form-label">Email</label>
-            <input type="email" class="form-control" id="user" name="user" aria-describedby="emailHelp">
+            <input type="email" class="form-control" id="user" name="user">
         </div>
         <div class="mb-3">
             <label for="message" class="form-label">Mensaje</label>
-            <textarea name="message" rows="5" class="w-100" id="message"></textarea>
+            <input type="text" class="form-control" id="message" name="message">
         </div>
         <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
@@ -17,3 +17,6 @@
         <p>Aca va el chat</p>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.js" integrity="sha512-rwu37NnL8piEGiFhe2c5j4GahN+gFsIn9k/0hkRY44iz0pc81tBNaUN56qF8X4fy+5pgAAgYi2C9FXdetne5sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="http://localhost:8080/js/main-messages.js"></script>
