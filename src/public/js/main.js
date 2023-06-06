@@ -3,7 +3,8 @@ const socket = io()
 const renderMessages = (data) => {
     const html = data.map((message) => {
         return (`
-        <p>${message.user}</p>
+        <p>Usuario: ${message.user}</p>
+        <p>Mensaje: ${message.message}</p>
         `)
     }).join('');
     document.getElementById('chat').innerHTML = html;
@@ -22,6 +23,10 @@ formMessage.onsubmit = e => {
 }
 
 socket.on('messages', (data) => {
-
     renderMessages(data)
+})
+
+window.addEventListener('load', () => {
+    const formMessage = document.getElementById('formMessage')
+    formMessage.style.display = 'none'
 })

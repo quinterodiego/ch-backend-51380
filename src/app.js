@@ -23,16 +23,6 @@ app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/api/chat', messagesRouter)
 
-app.get('/home', async (req, res) => {
-    const data = await fetch('http://localhost:8080/api/products')
-    const { payload } = await data.json()
-    res.render('home', { payload })
-})
-
-app.get('/realTimeProducts', async (req, res) => {
-    res.render('realTimeProducts', {})
-})
-
 app.get('/chat', async (req, res) => {
     res.render('chat', {})
 })
@@ -43,39 +33,19 @@ const server = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`)
 })
 
-// SOCKET
 const io = new Server(server)
 
 io.on('connection', async (socket) => {
-    console.log(`Nueva conexion Sockket: ${socket.id}`)
-
-    const products = await fetch('http://localhost:8080/api/products')
-
-    //socket.emit('products', products)
-
-    socket.on('newProduct', async data => {
-        // await productsManager.addProduct(data)
-        const products = await fetch('http://localhost:8080/api/products')
-        io.sockets.emit('products', products)
-    })
-
-    socket.on('delete', (id) => {
-        productsManager.deleteProduct(id)
-        io.sockets.emit('products', products)
-    })
+    console.log(`Nueva conexion ${socket.id}`)
 
     const messages = await MessageModel.find()
-    console.log(messages)
+
     socket.emit('messages', messages)
 
     socket.on('newMessage', async data => {
-        await fetch('http://localhost:8080/api/messages', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify(data)
-        })
+        await MessageModel.create(data)
+        const messages = await MessageModel.find()
+        io.sockets.emit('messages', messages)
     })
+
 })
