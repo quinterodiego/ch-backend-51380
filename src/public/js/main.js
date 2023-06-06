@@ -1,10 +1,23 @@
 const socket = io()
 
+let email = ''
+
+window.addEventListener('load', () => {
+    formMessage.style.display = 'none'
+    chat.style.display = 'none'
+})
+
 const renderMessages = (data) => {
     const html = data.map((message) => {
         return (`
-        <p>Usuario: ${message.user}</p>
-        <p>Mensaje: ${message.message}</p>
+        <figure>
+            <blockquote class="blockquote">
+                <p><strong>${message.user}</strong></p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                ${message.message}
+            </figcaption>
+        </figure>
         `)
     }).join('');
     document.getElementById('chat').innerHTML = html;
@@ -14,7 +27,7 @@ const formMessage = document.getElementById('formMessage')
 formMessage.onsubmit = e => {
     e.preventDefault()
     const message = {
-        user: document.getElementById('user').value,
+        user: email,
         message: document.getElementById('message').value
     }
 
@@ -26,7 +39,13 @@ socket.on('messages', (data) => {
     renderMessages(data)
 })
 
-window.addEventListener('load', () => {
-    const formMessage = document.getElementById('formMessage')
-    formMessage.style.display = 'none'
-})
+const chat = document.getElementById('chat')
+
+const formEmail = document.getElementById('email')
+formEmail.onsubmit = e => {
+    e.preventDefault()
+    email = document.getElementById('user').value
+    formMessage.style.display = 'block'
+    chat.style.display = 'block'
+    formEmail.style.display = 'none'
+}
