@@ -10,8 +10,8 @@ export const createCart = async (req, res) => {
 }
 
 export const getCartById = async (req, res) => {
-    const id = parseInt(req.params.cid)
-    const resp = await CartModel.getProductsById(id)
+    const id = req.params.cid
+    const resp = await CartModel.findOne({ _id: id })
     res.status(200).send({
         "status": "succes",
         "payload": resp
