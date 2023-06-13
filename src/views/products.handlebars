@@ -1,0 +1,26 @@
+<h1 class="text-white text-center p-5">PRODUCTOS</h1>
+
+<table class="table table-dark w-75 m-auto">
+    <thead>
+        <tr>
+            <th scope="col">Titulo</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Decripcion</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Imagen</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Cod.</th>
+            <th scope="col">Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each usuarios}}
+        <tr>
+            <td>{{this.firstName}}</td>
+            <td>{{this.email}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.js" integrity="sha512-rwu37NnL8piEGiFhe2c5j4GahN+gFsIn9k/0hkRY44iz0pc81tBNaUN56qF8X4fy+5pgAAgYi2C9FXdetne5sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="http://localhost:8080/js/main-products.js"></script>

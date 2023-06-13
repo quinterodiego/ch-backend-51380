@@ -1,20 +1,28 @@
 import {ProductModel} from './../dao/models/mongoDB/products.js'
+import __dirname from './../utils.js'
 
 export const getProducts =  async (req, res) => {
-    const products = await ProductModel.find()
-    const { limit } = req.query
-    if(limit) {
-        const productsLimit = products.splice(0, parseInt(limit))
-        res.status(200).send({ 
-            "status": "success",
-            "payload": productsLimit 
-        })
-    } else {
-        res.status(200).send({ 
-            "status": "success",
-            "payload": products 
-        })
-    }
+    // const products = await ProductModel.paginate({}, {})
+    const { limit, page, sort, query } = req.query
+    console.log(query)
+    const resp = await ProductModel.paginate({}, { limit: 10, page: 2 })
+    const products = resp.docs.map(item => {
+        return item
+    })
+    const { docs, ...rest } = query
+    return res.status(200).render('products', products)
+    // if(limit) {
+    //     const productsLimit = products.splice(0, parseInt(limit))
+    //     res.status(200).send({ 
+    //         "status": "success",
+    //         "payload": productsLimit 
+    //     })
+    // } else {
+    //     res.status(200).send({ 
+    //         "status": "success",
+    //         "payload": products
+    //     })
+    // }
 }
 
 export const getProductById = async (req, res) => {
