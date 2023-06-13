@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        {{#each usuarios}}
+        {{#each payload}}
         <tr>
             <td>{{this.title}}</td>
             <td>{{this.description}}</td>
@@ -33,18 +33,18 @@
     <ul class="pagination">
         {{#if pagination.hasPrevPage}}
         <li class="page-item">
-            <a class="page-link bg-dark" href="/products/{{pagination.prevPage}}" aria-label="Previous">
+            <a class="page-link bg-dark text-info" href="/products/{{pagination.prevLink}}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">{{pagination.prevPage}}</span>
             </a>
             
         </li>
         {{/if}}
-        <li class="page-item"><a class="page-link bg-dark" href="#">{{pagination.page}}</a></li>
+        <li class="page-item"><a class="page-link bg-dark text-info" href="#">{{pagination.page}}</a></li>
         {{#if pagination.hasNextPage}}
 
         <li class="page-item">
-            <a class="page-link bg-dark" href="/products/{{pagination.nextPage}}" aria-label="Next">
+            <a class="page-link bg-dark text-info" href="/products/{{pagination.nextLink}}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">{{pagination.nextPage}}</span>
             </a>
@@ -53,7 +53,7 @@
     </ul>
     <div class="link bg-dark">
     {{#each links}}
-        <a href='{{this.href}}'>{{this.label}}</a>
+        <a href='{{this.href}}' class='{{this.currentPage}}'>{{this.label}}</a>
     {{/each}}
     </div>
 </nav>
