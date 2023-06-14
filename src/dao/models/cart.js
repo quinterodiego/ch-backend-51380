@@ -3,13 +3,13 @@ import { Schema, model } from 'mongoose'
 const schema = new Schema({
     products: { 
         type: [{
-            product: {
+            idProd: {
                 type: Schema.Types.ObjectId,
                 ref: 'products',
                 index: true
             },
             quantity: {
-                type: Schema.Types.Number
+                type: Number
             }
         }],
         default: []

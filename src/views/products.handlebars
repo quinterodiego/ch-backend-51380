@@ -4,7 +4,6 @@
     <thead>
         <tr>
             <th scope="col">Titulo</th>
-            <th scope="col">Marca</th>
             <th scope="col">Decripcion</th>
             <th scope="col">Categoria</th>
             <th scope="col">Imagen</th>
@@ -14,13 +13,47 @@
         </tr>
     </thead>
     <tbody>
-        {{#each usuarios}}
+        {{#each payload}}
         <tr>
-            <td>{{this.firstName}}</td>
-            <td>{{this.email}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.category}}</td>
+            <td><img src="{{this.thumnail}}" width="75"/></td>
+            <td>${{this.price}}</td>
+            <td>{{this.code}}</td>
+            <td>{{this.stock}}</td>
         </tr>
+        {{/each}}
     </tbody>
+
 </table>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.js" integrity="sha512-rwu37NnL8piEGiFhe2c5j4GahN+gFsIn9k/0hkRY44iz0pc81tBNaUN56qF8X4fy+5pgAAgYi2C9FXdetne5sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="http://localhost:8080/js/main-products.js"></script>
+<br>
+<nav aria-label="Page navigation example" class="w-100 d-flex flex-column justify-content-center align-items-center">
+    <ul class="pagination">
+        {{#if pagination.hasPrevPage}}
+        <li class="page-item">
+            <a class="page-link bg-dark text-info" href="/products/{{pagination.prevLink}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">{{pagination.prevPage}}</span>
+            </a>
+            
+        </li>
+        {{/if}}
+        <li class="page-item"><a class="page-link bg-dark text-info" href="#">{{pagination.page}}</a></li>
+        {{#if pagination.hasNextPage}}
+
+        <li class="page-item">
+            <a class="page-link bg-dark text-info" href="/products/{{pagination.nextLink}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">{{pagination.nextPage}}</span>
+            </a>
+        </li>
+        {{/if}}
+    </ul>
+    <div class="link bg-dark">
+    {{#each links}}
+        <a href='{{this.href}}' class='{{this.currentPage}}'>{{this.label}}</a>
+    {{/each}}
+    </div>
+</nav>

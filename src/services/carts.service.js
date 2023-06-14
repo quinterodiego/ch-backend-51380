@@ -1,27 +1,19 @@
-import {CartModel} from './../dao/models/mongoDB/carts.js'
+import { CartModel } from './../DAO/models/cart.js';
 
-export const createCart = async (req, res) => {
+export const create = async () => {
     const products = []
     const resp = await CartModel.create({products})
-    res.status(201).send({
-        "status": "success",
-        "message": resp 
-    })
+
+    return resp
 }
 
-export const getCartById = async (req, res) => {
-    const id = req.params.cid
+export const getById = async (id) => {
     const resp = await CartModel.findOne({ _id: id })
-    res.status(200).send({
-        "status": "succes",
-        "payload": resp
-    })
+
+    return resp
 }
 
-export const addProductByIdInCart = async (req, res) => {
-    const idCart = req.params.cid
-    const idProduct = req.params.pid
-    const { quantity } = req.body
+export const addPruduct = async (idCart, idProduct, quantity) => {
     const cart = await CartModel.findOne({_id: idCart})
     const oldProducts = cart.products
     const productExists = oldProducts.find(product => product.idProduct === idProduct)
@@ -32,8 +24,17 @@ export const addProductByIdInCart = async (req, res) => {
         oldProducts.push({ id: idProduct, quantity })
     }
     const resp = await CartModel.updateOne({ _id: idCart}, {$set: {products: oldProducts}})
-    res.status(201).send({
-        "status": "success",
-        "message": resp
+
+    return resp
+}
+
+export const deleteProduct = async (idCart, idProduct) => {
+    const cart = await CartModel.findOne({ _id: idCart })
+    const oldProducts = cart.products
+    const newProducts = oldProducts.map( prod => {prod._id !== idProduct
+        console.log(prod._id)
     })
+    const resp = await CartModel.updateOne({ _id: idCart}, {$set: {products: newProducts}})
+
+    return resp
 }

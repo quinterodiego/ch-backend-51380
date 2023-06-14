@@ -1,52 +1,34 @@
-import express from 'express'
-import handlebars from 'express-handlebars'
-import { Server } from "socket.io"
-import __dirname from './utils.js'
-import path from 'path'
-import productsRouter from './routes/products.js'
-import cartsRouter from './routes/carts.js'
-import messagesRouter from './routes/messages.js'
-import connectMongoDB from './db/mongoDB/config.js'
-import { MessageModel } from './dao/models/mongoDB/messages.js'
+import express from "express";
+import { productRouter } from "./routes/product.js";
+import handlebars from "express-handlebars";
+import path from "path";
+import { __dirname, connectMongo } from "./utils.js";
+import cartRouter from "./routes/carts.js";
+const app = express();
+const port = 3000;
 
-const app = express()
-const PORT = 8080
+app.listen(port, () => {
+  console.log(`Example app listening on http://localhost:${port}`);
+});
 
-// HANDLEBARS
-app.engine('handlebars', handlebars.engine())
-app.set('view engine', 'handlebars')
-app.set("views", path.join(__dirname, 'views'))
+connectMongo();
 
-// MIDDLEWARES
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// ROUTERS
-app.use('/api/products', productsRouter)
-app.use('/api/carts', cartsRouter)
-app.use('/api/chat', messagesRouter)
+app.engine("handlebars", handlebars.engine());
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "handlebars");
 
-app.get('/chat', async (req, res) => {
-    res.render('chat', {})
-})
+app.use(express.static(path.join(__dirname, "public")));
 
-connectMongoDB()
+app.use("/products", productRouter);
+app.use("/cart", cartRouter);
 
-const server = app.listen(PORT, () => {
-    console.log(`Servidor escuchando en el puerto ${PORT}`)
-})
-
-const io = new Server(server)
-
-io.on('connection', async (socket) => {
-    console.log(`Nueva conexion ${socket.id}`)
-
-    const messages = await MessageModel.find()
-    socket.emit('messages', messages)
-    socket.on('newMessage', async data => {
-        await MessageModel.create(data)
-        const messages = await MessageModel.find()
-        io.sockets.emit('messages', messages)
-    })
-})
+app.get("*", (req, res) => {
+  return res.status(404).json({
+    status: "error",
+    msg: "no encontrado",
+    data: {},
+  });
+});
