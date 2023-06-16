@@ -8,7 +8,7 @@ export const create = async () => {
 }
 
 export const getById = async (id) => {
-    const resp = await CartModel.findOne({ _id: id })
+    const resp = await CartModel.findOne({ _id: id }).populate('products.product')
 
     return resp
 }
@@ -16,13 +16,7 @@ export const getById = async (id) => {
 export const addProduct = async (idCart, idProduct, quantity) => {
     const cart = await CartModel.findOne({_id: idCart})
     const oldProducts = cart.products
-    const productExists = oldProducts.find(product => product.id === idProduct)
-    if(productExists) {
-        const index = oldProducts.findIndex(product => product.id === idProduct)
-        oldProducts[index].quantity += quantity
-    } else {
-        oldProducts.push({ id: idProduct, quantity })
-    }
+    oldProducts.push({ product: idProduct, quantity })
     const resp = await CartModel.findByIdAndUpdate(idCart, { products: oldProducts}, { new: true })
 
     return resp
