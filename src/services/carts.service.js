@@ -38,16 +38,25 @@ export const deleteProduct = async (idCart, idProduct) => {
 }
 
 export const deleteProducts = async (idCart) => {
-    const cart = await CartModel.findOne({ _id: idCart })
-    const oldProducts = cart.products
-    const newProducts = oldProducts.filter( prod => prod.id !== idProduct)
-    const resp = await CartModel.findByIdAndUpdate(idCart, { products: newProducts}, { new: true })
+    const products = []
+    const resp = await CartModel.findByIdAndUpdate(idCart, { products: products}, { new: true })
 
     return resp
 }
 
 export const updateProducts = async (idCart, products) => {
     const resp = await CartModel.findByIdAndUpdate(idCart, { products: products}, { new: true })
+
+    return resp
+}
+
+export const updateQuantity = async (idCart, idProduct, quantity) => {
+    const cart = await CartModel.findOne({_id: idCart})
+    const oldProducts = cart.products
+    const index = oldProducts.findIndex(product => product.id === idProduct)
+    oldProducts[index].quantity = quantity
+
+    const resp = await CartModel.findByIdAndUpdate(idCart, { products: oldProducts}, { new: true })
 
     return resp
 }

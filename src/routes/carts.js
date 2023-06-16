@@ -1,5 +1,5 @@
 import Router from 'express'
-import { create, getById, addProduct, deleteProduct, updateProducts } from './../services/carts.service.js'
+import { create, getById, addProduct, deleteProduct, updateProducts, updateQuantity, deleteProducts } from './../services/carts.service.js'
 
 const cartRouter = Router()
 
@@ -20,7 +20,7 @@ cartRouter.get('/:cid', async (req, res) => {
     })
 })
 
-cartRouter.post('/:cid/product/:pid', async (req, res) => {
+cartRouter.post('/:cid/products/:pid', async (req, res) => {
     const idCart = req.params.cid
     const idProduct = req.params.pid
     const { quantity } = req.body
@@ -32,7 +32,7 @@ cartRouter.post('/:cid/product/:pid', async (req, res) => {
     })
 })
 
-cartRouter.delete('/:cid/product/:pid', async (req, res) => {
+cartRouter.delete('/:cid/products/:pid', async (req, res) => {
     const idCart = req.params.cid
     const idProduct = req.params.pid
     const resp = await deleteProduct(idCart, idProduct)
@@ -47,6 +47,28 @@ cartRouter.put('/:cid', async (req, res) => {
     const idCart = req.params.cid
     const products = req.body.products
     const resp = await updateProducts(idCart, products)
+    
+    res.status(201).send({
+        "status": "success",
+        "message": resp
+    })
+})
+
+cartRouter.put('/:cid/products/:pid', async (req, res) => {
+    const idCart = req.params.cid
+    const idProduct = req.params.pid
+    const quantity = req.body.quantity
+    const resp = await updateQuantity(idCart, idProduct, quantity)
+    
+    res.status(201).send({
+        "status": "success",
+        "message": resp
+    })
+})
+
+cartRouter.delete('/:cid', async (req, res) => {
+    const idCart = req.params.cid
+    const resp = await deleteProducts(idCart)
     
     res.status(201).send({
         "status": "success",
