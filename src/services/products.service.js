@@ -1,6 +1,7 @@
 import { ProductModel } from "../DAO/models/product.js";
 
 export const getAll = async (limit, page, query, sort) => {
+
   const filters = {
     page: page || 1,
     limit: limit || 10,

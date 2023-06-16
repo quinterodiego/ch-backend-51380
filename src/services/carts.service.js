@@ -45,3 +45,9 @@ export const deleteProducts = async (idCart) => {
 
     return resp
 }
+
+export const updateProducts = async (idCart, products) => {
+    const resp = await CartModel.findByIdAndUpdate(idCart, { products: products}, { new: true })
+
+    return resp
+}

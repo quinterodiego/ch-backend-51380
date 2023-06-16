@@ -1,5 +1,5 @@
 import Router from 'express'
-import { create, getById, addProduct, deleteProduct } from './../services/carts.service.js'
+import { create, getById, addProduct, deleteProduct, updateProducts } from './../services/carts.service.js'
 
 const cartRouter = Router()
 
@@ -20,16 +20,34 @@ cartRouter.get('/:cid', async (req, res) => {
     })
 })
 
-cartRouter.put('/:cid/product/:pid', async (req, res) => {
+cartRouter.post('/:cid/product/:pid', async (req, res) => {
     const idCart = req.params.cid
     const idProduct = req.params.pid
     const { quantity } = req.body
-    let resp = ''
-    if (quantity) {
-        resp = await addProduct(idCart, idProduct, quantity)
-    } else {
-        resp = await deleteProduct(idCart, idProduct)
-    }
+    const resp = await addProduct(idCart, idProduct, quantity)
+
+    res.status(201).send({
+        "status": "success",
+        "message": resp
+    })
+})
+
+cartRouter.delete('/:cid/product/:pid', async (req, res) => {
+    const idCart = req.params.cid
+    const idProduct = req.params.pid
+    const resp = await deleteProduct(idCart, idProduct)
+    
+    res.status(201).send({
+        "status": "success",
+        "message": resp
+    })
+})
+
+cartRouter.put('/:cid', async (req, res) => {
+    const idCart = req.params.cid
+    const products = req.body.products
+    const resp = await updateProducts(idCart, products)
+    
     res.status(201).send({
         "status": "success",
         "message": resp
