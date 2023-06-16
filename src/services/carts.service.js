@@ -36,3 +36,12 @@ export const deleteProduct = async (idCart, idProduct) => {
 
     return resp
 }
+
+export const deleteProducts = async (idCart) => {
+    const cart = await CartModel.findOne({ _id: idCart })
+    const oldProducts = cart.products
+    const newProducts = oldProducts.filter( prod => prod.id !== idProduct)
+    const resp = await CartModel.findByIdAndUpdate(idCart, { products: newProducts}, { new: true })
+
+    return resp
+}
