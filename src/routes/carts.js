@@ -1,5 +1,5 @@
 import Router from 'express'
-import { create, getById, addPruduct, deleteProduct } from './../services/carts.service.js'
+import { create, getById, addProduct, deleteProduct } from './../services/carts.service.js'
 
 const cartRouter = Router()
 
@@ -26,7 +26,7 @@ cartRouter.put('/:cid/product/:pid', async (req, res) => {
     const { quantity } = req.body
     let resp = ''
     if (quantity) {
-        resp = await addPruduct(idCart, idProduct, quantity)
+        resp = await addProduct(idCart, idProduct, quantity)
     } else {
         resp = await deleteProduct(idCart, idProduct)
     }

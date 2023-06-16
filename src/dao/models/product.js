@@ -13,6 +13,14 @@ const schema = new Schema({
     brand: { type: String, required: true, max: 100 }
 });
 
+schema.virtual('id').get(function () {
+    return this._id.toHexString()
+})
+
+schema.set('toJSON', {
+    virtuals: true
+})
+
 schema.plugin(monsoosePaginate);
 
 export const ProductModel = model('products', schema);

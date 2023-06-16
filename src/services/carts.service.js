@@ -13,17 +13,17 @@ export const getById = async (id) => {
     return resp
 }
 
-export const addPruduct = async (idCart, idProduct, quantity) => {
+export const addProduct = async (idCart, idProduct, quantity) => {
     const cart = await CartModel.findOne({_id: idCart})
     const oldProducts = cart.products
-    const productExists = oldProducts.find(product => product.idProduct === idProduct)
+    const productExists = oldProducts.find(product => product.id === idProduct)
     if(productExists) {
-        const index = oldProducts.findIndex(product => product.idProduct === idProduct)
+        const index = oldProducts.findIndex(product => product.id === idProduct)
         oldProducts[index].quantity += quantity
     } else {
         oldProducts.push({ id: idProduct, quantity })
     }
-    const resp = await CartModel.updateOne({ _id: idCart}, {$set: {products: oldProducts}})
+    const resp = await CartModel.findByIdAndUpdate(idCart, { products: oldProducts}, { new: true })
 
     return resp
 }
@@ -31,10 +31,8 @@ export const addPruduct = async (idCart, idProduct, quantity) => {
 export const deleteProduct = async (idCart, idProduct) => {
     const cart = await CartModel.findOne({ _id: idCart })
     const oldProducts = cart.products
-    const newProducts = oldProducts.map( prod => {prod._id !== idProduct
-        console.log(prod._id)
-    })
-    const resp = await CartModel.updateOne({ _id: idCart}, {$set: {products: newProducts}})
+    const newProducts = oldProducts.filter( prod => prod.id !== idProduct)
+    const resp = await CartModel.findByIdAndUpdate(idCart, { products: newProducts}, { new: true })
 
     return resp
 }

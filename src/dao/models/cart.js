@@ -3,17 +3,24 @@ import { Schema, model } from 'mongoose'
 const schema = new Schema({
     products: { 
         type: [{
-            idProd: {
+            product: {
                 type: Schema.Types.ObjectId,
-                ref: 'products',
-                index: true
+                ref: 'products'
             },
             quantity: {
-                type: Number
+                type: Number,
+                default: 0
             }
-        }],
-        default: []
+        }]
     }
+})
+
+schema.virtual('id').get(function () {
+    return this._id.toHexString()
+})
+
+schema.set('toJSON', {
+    virtuals: true
 })
 
 export const CartModel = model('carts', schema)
