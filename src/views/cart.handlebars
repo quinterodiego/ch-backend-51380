@@ -1,3 +1,5 @@
+<h1 class="text-white text-center p-5">CARRITO</h1>
+
 <div class="cards_container d-flex flex-wrap justify-content-center gap-3">
     {{#each payload}}
     <div class="card bg-dark text-white" style="width: 18rem;">
@@ -6,7 +8,7 @@
             <h5 class="card-title h3">{{this.title}}</h5>
             <p class="card-text">{{this.description}}</p>
             <p class="card-text h4">${{this.price}}</p>
-            <a href="#" class="btn btn-primary">Agregar al carrito</a>
+            <a href="#" class="btn btn-primary">Eliminar</a>
         </div>
     </div>
     {{/each}}
