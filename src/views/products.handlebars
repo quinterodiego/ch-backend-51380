@@ -33,7 +33,7 @@
     <ul class="pagination">
         {{#if pagination.hasPrevPage}}
         <li class="page-item">
-            <a class="page-link bg-dark text-info" href="/products/{{pagination.prevLink}}" aria-label="Previous">
+            <a class="page-link bg-dark text-info" href="/products{{pagination.prevLink}}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">{{pagination.prevPage}}</span>
             </a>
@@ -44,7 +44,7 @@
         {{#if pagination.hasNextPage}}
 
         <li class="page-item">
-            <a class="page-link bg-dark text-info" href="/products/{{pagination.nextLink}}" aria-label="Next">
+            <a class="page-link bg-dark text-info" href="/products{{pagination.nextLink}}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">{{pagination.nextPage}}</span>
             </a>

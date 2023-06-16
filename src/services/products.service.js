@@ -1,18 +1,17 @@
 import { ProductModel } from "../DAO/models/product.js";
 
-export const getAll = async (params) => {
-  const { limit, page, query, sort } = params
-
+export const getAll = async (limit, page, query, sort) => {
   const filters = {
     page: page || 1,
     limit: limit || 10,
     sort: sort || ''
   }
 
+
   const querySearch = query ? { category: query } : ''
 
   const resp = await ProductModel.paginate( querySearch, filters)
-
+  
   const paramLimit = limit ? `&limit=${limit}` : ''
   const paramSort = sort ? `&sort=${sort}` : ''
   const paramQuery = query ? `$query=${query}` : ''
@@ -44,7 +43,7 @@ export const getAll = async (params) => {
     } else {
       currentPage = 'text-info text-decoration-none'
     }
-    links.push({ label: i, href: 'http://localhost:3000/products/?page=' + i, currentPage });
+    links.push({ label: i, href: 'http://localhost:3000/products?page=' + i, currentPage });
   }
 
   return { 
