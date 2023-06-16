@@ -5,6 +5,7 @@ import { __dirname, connectMongo } from "./utils.js";
 import { productRouter } from "./routes/product.js";
 import { productRouterView } from "./routes/product.view.js";
 import cartRouter from "./routes/carts.js";
+import { cartRouterView } from "./routes/cart.view.js";
 const app = express();
 const port = 3000;
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/products", productRouterView);
+app.use("/carts", cartRouterView);
 
 app.get("*", (req, res) => {
   return res.status(404).json({
