@@ -1,8 +1,9 @@
 import express from "express";
-import { productRouter } from "./routes/product.js";
 import handlebars from "express-handlebars";
 import path from "path";
 import { __dirname, connectMongo } from "./utils.js";
+import { productRouter } from "./routes/product.js";
+import { productRouterView } from "./routes/product.view.js";
 import cartRouter from "./routes/carts.js";
 const app = express();
 const port = 3000;
@@ -22,8 +23,9 @@ app.set("view engine", "handlebars");
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/products", productRouter);
-app.use("/cart", cartRouter);
+app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
+app.use("/products", productRouterView);
 
 app.get("*", (req, res) => {
   return res.status(404).json({

@@ -1,6 +1,11 @@
 import { ProductModel } from "../DAO/models/product.js";
 
-export const getAll = async (limit, page, query, sort) => {
+export const getAll = async (req, res) => {
+  const resp = await ProductModel.find()
+  return resp
+}
+
+export const getAllWithPaginate = async (limit, page, query, sort) => {
 
   const filters = {
     page: page || 1,

@@ -4,9 +4,8 @@ import { create, deleteProduct, getAll, getById, update } from '../services/prod
 export const productRouter = express.Router();
 
 productRouter.get('/', async (req, res) => {
-  const { limit, page, query, sort } = req.query
-  const resp = await getAll(limit, page, query, sort)
-  res.status(200).render('products', resp)
+  const resp = await getAll()
+  res.status(200).send(resp)
 });
 
 productRouter.get('/:pid', async (req, res) => {
