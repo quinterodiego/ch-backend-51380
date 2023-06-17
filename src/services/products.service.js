@@ -1,11 +1,6 @@
 import { ProductModel } from "../DAO/models/product.js";
 
-export const getAll = async (req, res) => {
-  const resp = await ProductModel.find()
-  return resp
-}
-
-export const getAllWithPaginate = async (limit, page, query, sort) => {
+export const getAll = async (limit, page, query, sort) => {
 
   const filters = {
     page: page || 1,
@@ -33,7 +28,7 @@ export const getAllWithPaginate = async (limit, page, query, sort) => {
         title: item.title,
         description: item.description,
         category: item.category,
-        thumnail: item.thumbnail[0],
+        thumbnail: item.thumbnail[0],
         price: item.price,
         code: item.code,
         stock: item.stock
@@ -41,22 +36,10 @@ export const getAllWithPaginate = async (limit, page, query, sort) => {
   });
   const { docs, ...rest } = resp;
 
-  let links = [];
-  for (let i = 1; i < rest.totalPages + 1; i++) {
-    let currentPage = ''
-    if (i == rest.page) {
-      currentPage = 'h6 text-white text-decoration-none'
-    } else {
-      currentPage = 'text-info text-decoration-none'
-    }
-    links.push({ label: i, href: 'http://localhost:3000/products?page=' + i, currentPage });
-  }
-
   return { 
       status: 'success', 
       payload, 
-      pagination: rest, 
-      links 
+      pagination: rest 
     }
 }
 

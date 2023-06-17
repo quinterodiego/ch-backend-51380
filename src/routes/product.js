@@ -4,7 +4,8 @@ import { create, deleteProduct, getAll, getById, update } from '../services/prod
 export const productRouter = express.Router();
 
 productRouter.get('/', async (req, res) => {
-  const resp = await getAll()
+  const { limit, page, query, sort } = req.query
+  const resp = await getAll(limit, page, query, sort)
   res.status(200).send(resp)
 });
 
