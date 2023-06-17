@@ -1,4 +1,5 @@
 import { CartModel } from './../DAO/models/cart.js';
+import { ProductModel } from './../DAO/models/product.js';
 
 export const create = async () => {
     const products = []
@@ -9,25 +10,36 @@ export const create = async () => {
 
 export const getById = async (id) => {
     const resp = await CartModel.findById({_id: id}).populate('products.product')
+    console.log(resp)
     const payload = resp.products.map(p => {
         return {
             title: p.product.title,
             description: p.product.description,
             thumbnail: p.product.thumbnail[0],
-            price: p.product.price
+            price: p.product.price,
+            id: p.product.id
         }
     })
 
     return payload
 }
 
-export const addProduct = async (idCart, idProduct, quantity) => {
-    const cart = await CartModel.findOne({_id: idCart})
-    const oldProducts = cart.products
-    oldProducts.push({ product: idProduct, quantity })
-    const resp = await CartModel.findByIdAndUpdate(idCart, { products: oldProducts}, { new: true })
-
-    return resp
+export const addProduct = async (idCart, idProduct) => {
+    try {
+        const cart = await CartModel.findById(idCart);
+        const product = await ProductModel.findById(idProduct);
+        if (!cart) {
+            throw new Error("Cart not found");
+        }
+        if (!product) {
+            throw new Error("Product not found");
+        }
+        cart.products.push({ product: product._id, quantity: 1 });
+        await cart.save();
+        return cart;
+    } catch (error) {
+        throw error;
+    }
 }
 
 export const deleteProduct = async (idCart, idProduct) => {

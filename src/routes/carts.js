@@ -23,8 +23,7 @@ cartRouter.get('/:cid', async (req, res) => {
 cartRouter.post('/:cid/products/:pid', async (req, res) => {
     const idCart = req.params.cid
     const idProduct = req.params.pid
-    const { quantity } = req.body
-    const resp = await addProduct(idCart, idProduct, quantity)
+    const resp = await addProduct(idCart, idProduct)
 
     res.status(201).send({
         "status": "success",
