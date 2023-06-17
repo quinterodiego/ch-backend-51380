@@ -28,12 +28,6 @@ export const addProduct = async (idCart, idProduct) => {
     try {
         const cart = await CartModel.findById(idCart);
         const product = await ProductModel.findById(idProduct);
-        if (!cart) {
-            throw new Error("Cart not found");
-        }
-        if (!product) {
-            throw new Error("Product not found");
-        }
         cart.products.push({ product: product._id, quantity: 1 });
         await cart.save();
         return cart;
