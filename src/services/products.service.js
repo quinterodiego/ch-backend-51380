@@ -11,7 +11,6 @@ export const getAll = async (limit, page, sort, category, stock) => {
   let query = {}
   category ? query.category = category : null
   stock ? query.stock = { $gt: stock} : null
-  console.log(query)
   const resp = await ProductModel.paginate( query, filters)
   
   const paramLimit = limit ? `&limit=${limit}` : ''

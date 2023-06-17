@@ -15,7 +15,7 @@ cartRouter.get('/:cid', async (req, res) => {
     const id = req.params.cid
     const resp = await getById(id)
     res.status(200).send({
-        "status": "succes",
+        "status": "success",
         "payload": resp
     })
 })
