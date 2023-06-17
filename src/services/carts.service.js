@@ -1,5 +1,4 @@
 import { CartModel } from './../DAO/models/cart.js';
-import { ProductModel } from "../DAO/models/product.js";
 
 export const create = async () => {
     const products = []
@@ -9,9 +8,8 @@ export const create = async () => {
 }
 
 export const getById = async (id) => {
-    const resp = await CartModel.findOne({ _id: id }).populate('products.product')
+    const resp = await CartModel.findById({_id: id}).populate('products.product')
     const payload = resp.products.map(p => {
-        console.log(p)
         return {
             title: p.product.title,
             description: p.product.description,
@@ -20,7 +18,7 @@ export const getById = async (id) => {
         }
     })
 
-    return {payload}
+    return payload
 }
 
 export const addProduct = async (idCart, idProduct, quantity) => {
@@ -42,8 +40,7 @@ export const deleteProduct = async (idCart, idProduct) => {
 }
 
 export const deleteProducts = async (idCart) => {
-    const products = []
-    const resp = await CartModel.findByIdAndUpdate(idCart, { products: products}, { new: true })
+    const resp = await CartModel.findByIdAndUpdate(idCart, { products: []}, { new: true })
 
     return resp
 }

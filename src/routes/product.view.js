@@ -6,5 +6,6 @@ export const productRouterView = express.Router();
 productRouterView.get('/', async (req, res) => {
     const { limit, page, sort, category, stock } = req.query
     const resp = await getAll(limit, page, sort, category, stock)
+    console.log(resp)
     res.status(200).render('products', resp)
 });
