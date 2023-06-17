@@ -10,14 +10,14 @@ export const create = async () => {
 
 export const getById = async (id) => {
     const resp = await CartModel.findById({_id: id}).populate('products.product')
-    console.log(resp)
     const payload = resp.products.map(p => {
         return {
             title: p.product.title,
             description: p.product.description,
             thumbnail: p.product.thumbnail[0],
             price: p.product.price,
-            id: p.product.id
+            id: p.product.id,
+            quantity: p.quantity
         }
     })
 
