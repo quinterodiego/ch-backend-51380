@@ -60,7 +60,7 @@ export const updateProducts = async (idCart, products) => {
 export const updateQuantity = async (idCart, idProduct, quantity) => {
     const cart = await CartModel.findOne({_id: idCart})
     const oldProducts = cart.products
-    const index = oldProducts.findIndex(product => product.id === idProduct)
+    const index = oldProducts.findIndex(product => product.product.toString() === idProduct)
     oldProducts[index].quantity = quantity
 
     const resp = await CartModel.findByIdAndUpdate(idCart, { products: oldProducts}, { new: true })
