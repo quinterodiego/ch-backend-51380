@@ -1,6 +1,6 @@
 import { ProductModel } from "../DAO/models/product.js";
 
-export const getAll = async (limit, page, query, sort) => {
+export const getAll = async (limit, page, sort, category, stock) => {
 
   const filters = {
     page: page || 1,
@@ -8,17 +8,19 @@ export const getAll = async (limit, page, query, sort) => {
     sort: sort || ''
   }
 
-
-  const querySearch = query ? { category: query } : ''
-
-  const resp = await ProductModel.paginate( querySearch, filters)
+  let query = {}
+  category ? query.category = category : null
+  stock ? query.stock = { $gt: stock} : null
+  console.log(query)
+  const resp = await ProductModel.paginate( query, filters)
   
   const paramLimit = limit ? `&limit=${limit}` : ''
   const paramSort = sort ? `&sort=${sort}` : ''
-  const paramQuery = query ? `$query=${query}` : ''
+  const paramCategory = category ? `&category=${category}` : ''
+  const paramStock = stock ? `&stock=${stock}` : ''
 
-  const prevParams = new URLSearchParams(`${paramLimit}&page=${resp.prevPage}${paramSort}${paramQuery}`)
-  const nextParams = new URLSearchParams(`${paramLimit}&page=${resp.nextPage}${paramSort}${paramQuery}`)
+  const prevParams = new URLSearchParams(`${paramLimit}&page=${resp.prevPage}${paramSort}${paramCategory}${paramStock}`)
+  const nextParams = new URLSearchParams(`${paramLimit}&page=${resp.nextPage}${paramSort}${paramCategory}${paramStock}`)
 
   resp.prevLink = resp.prevPage ? `?${prevParams}` : null
   resp.nextLink = resp.nextPage ? `?${nextParams}` : null
