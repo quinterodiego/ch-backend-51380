@@ -37,9 +37,9 @@ export const addProduct = async (idCart, idProduct) => {
 }
 
 export const deleteProduct = async (idCart, idProduct) => {
-    const cart = await CartModel.findOne({ _id: idCart })
+    const cart = await CartModel.findById(idCart)
     const oldProducts = cart.products
-    const newProducts = oldProducts.filter( prod => prod.id !== idProduct)
+    const newProducts = oldProducts.filter( prod => prod.product.toString() !== idProduct)
     const resp = await CartModel.findByIdAndUpdate(idCart, { products: newProducts}, { new: true })
 
     return resp
