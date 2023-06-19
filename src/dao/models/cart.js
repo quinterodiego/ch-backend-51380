@@ -9,12 +9,4 @@ const schema = new Schema({
     products: [productSchema]
 }, { versionKey: false })
 
-schema.virtual('id').get(function () {
-    return this._id.toHexString()
-})
-
-schema.set('toJSON', {
-    virtuals: true
-})
-
 export const CartModel = model('carts', schema)

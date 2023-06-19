@@ -25,14 +25,16 @@ export const getAll = async (limit, page, sort, category, stock) => {
   resp.nextLink = resp.nextPage ? `?${nextParams}` : null
 
   const payload = resp.docs.map((item) => {
-    return { 
+    return {
+        _id: item._id, 
         title: item.title,
         description: item.description,
         category: item.category,
         thumbnail: item.thumbnail[0],
         price: item.price,
         code: item.code,
-        stock: item.stock
+        stock: item.stock,
+        status: item.status
     };
   });
   const { docs, ...rest } = resp;

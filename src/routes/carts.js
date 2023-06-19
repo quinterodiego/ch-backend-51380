@@ -1,7 +1,7 @@
-import Router from 'express'
+import express from 'express'
 import { create, getById, addProduct, deleteProduct, updateProducts, updateQuantity, deleteProducts } from './../services/carts.service.js'
 
-const cartRouter = Router()
+const cartRouter = express.Router()
 
 cartRouter.post('/', async (req, res) => {
     const resp = await create()
@@ -23,15 +23,7 @@ cartRouter.get('/:cid', async (req, res) => {
 cartRouter.post('/:cid/products/:pid', async (req, res) => {
     const idCart = req.params.cid
     const idProduct = req.params.pid
-    const cart = await getById(idCart)
-    const productExist = cart.find(prod => prod.id == idProduct)
-    let resp = ''
-    if(!productExist) {
-        resp = await addProduct(idCart, idProduct)
-    } else {
-        resp = 'El producto ya existe'
-    }
-
+    const resp = await addProduct(idCart, idProduct)
     res.status(201).send({
         "status": "success",
         "message": resp

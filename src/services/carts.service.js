@@ -9,40 +9,54 @@ export const create = async () => {
 }
 
 export const getById = async (id) => {
-    const resp = await CartModel.findById({_id: id}).populate('products.product')
-    const payload = resp.products.map(p => {
-        return {
-            title: p.product.title,
-            description: p.product.description,
-            thumbnail: p.product.thumbnail[0],
-            price: p.product.price,
-            id: p.product.id,
-            quantity: p.quantity
+    const resp = await CartModel.findById(id).populate('products.product')
+    const products = resp.products.map(prod => {
+        const { product } = prod
+        return {      
+            "_id": product._id,
+            "title": product.title,
+            "description": product.description,
+            "price": product.price,
+            "stock": product.stock,
+            "brand": product.brand,
+            "category": product.category,
+            "code": product.code,
+            "status": product.status,
+            "thumbnail": product.thumbnail[0],
+            "quantity": prod.quantity
         }
     })
-
-    return payload
+    return products
 }
 
 export const addProduct = async (idCart, idProduct) => {
-    try {
-        const cart = await CartModel.findById(idCart);
-        const product = await ProductModel.findById(idProduct);
-        cart.products.push({ product: product._id, quantity: 1 });
-        await cart.save();
-        return cart;
-    } catch (error) {
-        throw error;
+    const cart = await CartModel.findById(idCart)
+    const exist = cart.products.find(prod => prod.product.toString() === idProduct)
+    let resp = ''
+    if(!exist) {
+        cart.products.push({ product: idProduct, quantity: 1 })
+        resp = await cart.save()
+        return resp
+    } else {
+        resp = 'El producto ya existe en el carrito'
+        return resp
     }
 }
 
 export const deleteProduct = async (idCart, idProduct) => {
     const cart = await CartModel.findById(idCart)
-    const oldProducts = cart.products
-    const newProducts = oldProducts.filter( prod => prod.product.toString() !== idProduct)
-    const resp = await CartModel.findByIdAndUpdate(idCart, { products: newProducts}, { new: true })
+    const exist = cart.products.find(prod => prod.product.toString() === idProduct)
+    let resp = ''
+    if(!exist) {
+        resp = 'El producto que intenta borrar no existe en el carrito'
+        return resp
+    } else {
+        const oldProducts = cart.products
+        const newProducts = oldProducts.filter( prod => prod.product.toString() !== idProduct)
+        resp = await CartModel.findByIdAndUpdate(idCart, { products: newProducts}, { new: true })
+        return resp
+    }
 
-    return resp
 }
 
 export const deleteProducts = async (idCart) => {
@@ -59,11 +73,16 @@ export const updateProducts = async (idCart, products) => {
 
 export const updateQuantity = async (idCart, idProduct, quantity) => {
     const cart = await CartModel.findOne({_id: idCart})
-    const oldProducts = cart.products
-    const index = oldProducts.findIndex(product => product.product.toString() === idProduct)
-    oldProducts[index].quantity = quantity
-
-    const resp = await CartModel.findByIdAndUpdate(idCart, { products: oldProducts}, { new: true })
-
-    return resp
+    const exist = cart.products.find(prod => prod.product.toString() === idProduct)
+    let resp = ''
+    if(!exist) {
+        resp = 'El producto que intenta actualizar no existe en el carrito'
+        return resp
+    } else {
+        const oldProducts = cart.products
+        const index = oldProducts.findIndex(product => product.product.toString() === idProduct)
+        oldProducts[index].quantity = quantity
+        resp = await CartModel.findByIdAndUpdate(idCart, { products: oldProducts}, { new: true })
+        return resp
+    }
 }
