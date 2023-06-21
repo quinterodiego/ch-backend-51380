@@ -1,4 +1,17 @@
-<h1 class="text-white text-center p-5">PRODUCTOS</h1>
+<div class="d-flex justify-content-around pt-2">
+    <div class="alert alert-success w-25 d-flex flex-column" role="alert">
+        <p class="h4">Bienvenido</p>
+        {{userData.firstname}} {{userData.lastname}}
+        <br>
+        Email: {{userData.email}}
+        <br>
+        Rol: {{userData.rol}}
+    </div>
+    <h1 class="text-white text-center p-5">PRODUCTOS</h1>
+    <div class="w-25 d-flex" role="alert">
+        <a href="/logout" class="btn btn-danger m-auto">Logout</a>
+    </div>
+</div>
 
 <nav aria-label="Page navigation example" class="w-100 d-flex flex-column justify-content-center align-items-center">
     <ul class="pagination">

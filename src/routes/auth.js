@@ -16,9 +16,11 @@ authRouter.post('/login', async (req, res) => {
     }
     const findUser = await UserModel.findOne({ email: email })
     if(findUser && findUser.password == password) {
+        req.session.firstname = findUser.firstname
+        req.session.lastname = findUser.lastname
         req.session.email = findUser.email
         req.session.isAdmin = findUser.isAdmin
-        return res.redirect('/auth/perfil')
+        return res.redirect('/products')
     } else {
         return res.status(401).render('error', { error: 'Email o password incorrectos' })
     }
@@ -48,7 +50,7 @@ authRouter.post('/register', async (req, res) => {
         await UserModel.create({ firstname, lastname, email, password, isAdmin: false })
         req.session.email = email
         req.session.isAdmin = false
-        return res.redirect('/auth/perfil')
+        return res.redirect('/products')
     } catch (error) {
         console.log(error)
         return res.status(400).render('error', { error: 'No se pudo crear el usuario' })
@@ -61,6 +63,6 @@ authRouter.get('/logout', async (req, res) => {
             return res.status(500).render('error', { error: 'No se pudo cerrar la sesión ' })
         }
 
-        return res.redirect('/auth/login')
+        return res.redirect('/login')
     })
 })
