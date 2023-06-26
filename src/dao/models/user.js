@@ -5,7 +5,7 @@ const schema = new Schema({
     lastname: { type: String, required: true, max: 100 },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, max: 100 },
-    isAdmin: { type: Boolean, required: true }
+    isAdmin: { type: Boolean, required: true, default: false }
 });
 
 export const UserModel = model('users', schema);

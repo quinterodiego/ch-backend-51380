@@ -1,6 +1,7 @@
 import express from 'express'
 import { UserModel } from './../dao/models/user.js';
 import { isUser, isAdmin } from '../middlewares/index.js';
+import { createHash, isValidPassword } from '../utils/index.js'
 
 export const authRouter = express.Router()
 
@@ -15,7 +16,7 @@ authRouter.post('/auth/login', async (req, res) => {
 
     }
     const findUser = await UserModel.findOne({ email: email })
-    if(findUser && findUser.password == password) {
+    if(findUser && isValidPassword(password, findUser.password)) {
         req.session.firstname = findUser.firstname
         req.session.lastname = findUser.lastname
         req.session.email = findUser.email
@@ -47,7 +48,7 @@ authRouter.post('/auth/register', async (req, res) => {
     }
 
     try {
-        await UserModel.create({ firstname, lastname, email, password, isAdmin: false })
+        await UserModel.create({ firstname, lastname, email, password: createHash(password), isAdmin: false })
         req.session.firstname = firstname
         req.session.lastname = lastname
         req.session.email = email
