@@ -4,11 +4,11 @@ import { isUser, isAdmin } from '../middlewares/index.js';
 
 export const authRouter = express.Router()
 
-authRouter.get('/login', async (req, res) => {
+authRouter.get('/auth/login', async (req, res) => {
     res.render('login', {})
 })
 
-authRouter.post('/login', async (req, res) => {
+authRouter.post('/auth/login', async (req, res) => {
     const { email, password } = req.body
     if(!email || !password) {
         return res.status(400).render('error', { error: 'Debe completar todos los campos' })
@@ -26,21 +26,21 @@ authRouter.post('/login', async (req, res) => {
     }
 })
 
-authRouter.get('/perfil', isUser, (req, res) => {
+authRouter.get('/auth/perfil', isUser, (req, res) => {
     const user = { email: req.session.email, isAdmin: req.session.isAdmin }
     res.render('perfil', {user: user})
 })
 
-authRouter.get('/administracion', isUser, isAdmin, (req, res) => {
+authRouter.get('/auth/administracion', isUser, isAdmin, (req, res) => {
     
     res.send('Datos super secretos')
 })
 
-authRouter.get('/register', (req, res) => {
+authRouter.get('/auth/register', (req, res) => {
     res.render('register', {})
 })
 
-authRouter.post('/register', async (req, res) => {
+authRouter.post('/auth/register', async (req, res) => {
     const { firstname, lastname, email, password } = req.body
     if(!email || !password || !firstname || !lastname) {
         return res.status(400).render('error', { error: 'Debe completar todos los campos' })
@@ -48,6 +48,8 @@ authRouter.post('/register', async (req, res) => {
 
     try {
         await UserModel.create({ firstname, lastname, email, password, isAdmin: false })
+        req.session.firstname = firstname
+        req.session.lastname = lastname
         req.session.email = email
         req.session.isAdmin = false
         return res.redirect('/products')
@@ -57,12 +59,12 @@ authRouter.post('/register', async (req, res) => {
     }
 })
 
-authRouter.get('/logout', async (req, res) => {
+authRouter.get('/auth/logout', async (req, res) => {
     req.session.destroy((err) => {
         if(err) {
             return res.status(500).render('error', { error: 'No se pudo cerrar la sesión ' })
         }
 
-        return res.redirect('/login')
+        return res.redirect('/auth/login')
     })
 })

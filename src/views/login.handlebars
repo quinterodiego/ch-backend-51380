@@ -2,7 +2,7 @@
 
     <h1 class="p-5">LOGIN</h1>
 
-    <form action="/login" method="POST" class="w-25 m-auto">
+    <form action="/auth/login" method="POST" class="w-25 m-auto">
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp">
@@ -12,6 +12,6 @@
             <input type="password" class="form-control" name="password" id="password">
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
-        <a class="btn btn-success" href="/register">Aún no tengo cuenta</a>
+        <a class="btn btn-success" href="/auth/register">Aún no tengo cuenta</a>
     </form>
 </div>
