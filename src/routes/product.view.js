@@ -9,8 +9,8 @@ productRouterView.get('/', isUser, async (req, res) => {
     const resp = await getAll(limit, page, sort, category, stock)
     console.log(req.session)
     const userData = {
-        firstname: req.session.firstname,
-        lastname: req.session.lastname ,
+        firstname: req.session.user.firstname,
+        lastname: req.session.user.lastname ,
         email: req.session.user.email,
         rol: req.session.user.isAdmin ? 'Admin' : 'Usuario'
     }
