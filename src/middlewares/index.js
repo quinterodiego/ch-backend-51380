@@ -7,7 +7,7 @@ export const isAdmin = (req, res, next) => {
 }
 
 export const isUser = (req, res, next) => {
-    if(req.session?.email) {
+    if(req.session?.user?.email) {
         return next()
     }
 

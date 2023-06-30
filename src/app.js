@@ -4,6 +4,7 @@ import path from "path"
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
+import passport from 'passport';
 
 import { __dirname, connectMongo } from "./utils/index.js"
 import { productRouter } from "./routes/product.js"
@@ -11,6 +12,7 @@ import { productRouterView } from "./routes/product.view.js"
 import cartRouter from "./routes/carts.js"
 import { cartRouterView } from "./routes/cart.view.js"
 import { authRouter } from './routes/auth.js'
+import { iniPassport } from './config/passport.js';
 
 const app = express();
 const PORT = 8080;
@@ -28,6 +30,11 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
+// PASSPORT
+iniPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // HANDLEBARS
 app.engine("handlebars", handlebars.engine());
@@ -41,8 +48,9 @@ app.use("/api/carts", cartRouter);
 // ROUTES VIEWS
 app.use("/products", productRouterView);
 app.use("/carts", cartRouterView);
+app.use('/auth', authRouter)
 
-app.use('/', authRouter)
+app.get('/', (req, res) =>  res.redirect('/auth/login'))
 
 // 404
 app.get("*", (req, res) => {
