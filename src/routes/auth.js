@@ -70,3 +70,10 @@ authRouter.get('/logout', async (req, res) => {
 authRouter.get('/session', (req, res) => {
     return res.send(JSON.stringify(req.session));
 });
+
+authRouter.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+
+authRouter.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/faillogin' }), (req, res) => {
+    req.session.user = req.user;
+    return res.redirect('/products');
+});

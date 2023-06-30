@@ -45,11 +45,10 @@ app.set("view engine", "handlebars");
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 
-// ROUTES VIEWS
+//ROUTES VIEWS
 app.use("/products", productRouterView);
 app.use("/carts", cartRouterView);
 app.use('/auth', authRouter)
-
 app.get('/', (req, res) =>  res.redirect('/auth/login'))
 
 // 404

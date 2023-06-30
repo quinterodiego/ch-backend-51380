@@ -7,7 +7,6 @@ export const productRouterView = express.Router();
 productRouterView.get('/', isUser, async (req, res) => {
     const { limit, page, sort, category, stock } = req.query
     const resp = await getAll(limit, page, sort, category, stock)
-    console.log(req.session)
     const userData = {
         firstname: req.session.user.firstname,
         lastname: req.session.user.lastname ,
