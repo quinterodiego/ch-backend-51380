@@ -5,7 +5,6 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import passport from 'passport';
-import jwt from 'jsonwebtoken'
 
 import { __dirname, connectMongo } from "./utils/index.js"
 import { productRouter } from "./routes/product.js"
@@ -18,7 +17,6 @@ import { checkAuth, passportCall } from "./middlewares/index.js";
 
 const app = express();
 const PORT = 8080;
-const SECRET = 'DiegoQuintero'
 
 connectMongo();
 
@@ -46,34 +44,34 @@ app.set("view engine", "handlebars");
 
 // ROUTES APIS
 app.use("/api/products", productRouter);
-app.use("/api/carts", cartRouter);
+app.use("/api/carts", cartRouter); 
 
 //ROUTES VIEWS
 app.use("/products", productRouterView);
 app.use("/carts", cartRouterView);
 app.use('/auth', authRouter)
-// app.get('/', (req, res) =>  res.redirect('/auth/login'))
+app.get('/', (_, res) =>  res.redirect('/auth/login'))
 
-app.use('/api/jwt-login', (req, res) => {
-  const { email, password } = req.body
-  console.log(email, password)
-  if(email == 'd86webs@gmail.com' && password == '123456') {
-    const token = jwt.sign({ email, role: 'user'}, SECRET, { expiresIn: '24h' })
-    console.log('Logueado')
-    return res.status(200).cookie('token', token, { maxAge: 60 * 60 * 1000, httpOnly: true })
-    .json({
-      status: 'success',
-      msg: 'Login success!',
-      payload: {}
-    })
-  } else {
-    return res.status(400).json({
-      status: 'error',
-      msg: 'No se puede ingresar',
-      payload: {}
-    })
-  }
-})
+// app.use('/api/jwt-login', (req, res) => {
+//   const { email, password } = req.body
+//   console.log(email, password)
+//   if(email == 'd86webs@gmail.com' && password == '123456') {
+//     const token = jwt.sign({ email, role: 'admin'}, SECRET, { expiresIn: '24h' })
+//     console.log('Logueado')
+//     return res.status(200).cookie('token', token, { maxAge: 60 * 60 * 1000, httpOnly: true })
+//     .json({
+//       status: 'success',
+//       msg: 'Login success!',
+//       payload: {}
+//     })
+//   } else {
+//     return res.status(400).json({
+//       status: 'error',
+//       msg: 'No se puede ingresar',
+//       payload: {}
+//     })
+//   }
+// })
 
 // app.use('/api/jwt-profile', (req, res) => {
 //   const token = req.headers['authorization'].split(' ')[1]
@@ -95,14 +93,14 @@ app.use('/api/jwt-login', (req, res) => {
 //   }
 // })
 
-app.get('/api/jwt-profile', passportCall('jwt'), checkAuth('admin'), (req, res) => {
-  console.log('hola api')
-  res.send(req.user)
-})
+// app.get('/api/jwt-profile', passportCall('jwt'), checkAuth('admin'), (req, res) => {
+//   console.log('hola api')
+//   res.send(req.user)
+// })
 
-app.get('/', (req, res) => {
-  return res.render('jwt-login')
-})
+// app.get('/', (req, res) => {
+//   return res.render('login')
+// })
 
 // 404
 app.get("*", (req, res) => {

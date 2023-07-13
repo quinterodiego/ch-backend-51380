@@ -5,6 +5,7 @@ import jwt from 'passport-jwt'
 
 import { createHash, isValidPassword } from '../utils/index.js';
 import { UserModel } from '../dao/models/user.js'
+import { create } from '../services/carts.service.js'
 
 const LocalStrategy = local.Strategy
 const JWTStrategy = jwt.Strategy
@@ -46,41 +47,45 @@ export function iniPassport() {
     //     })
     // )
 
-    // passport.use(
-    //     'register',
-    //     new LocalStrategy(
-    //     {
-    //         passReqToCallback: true,
-    //         usernameField: 'email',
-    //     },
-    //     async (req, username, password, done) => {
-    //         try {
-    //             const { email, firstname, lastname } = req.body
-    //             let user = await UserModel.findOne({ email: username })
-    //             if (user) {
-    //                 console.log('User already exists')
-    //                 return done(null, false)
-    //             }
+    passport.use(
+        'register',
+        new LocalStrategy(
+        {
+            passReqToCallback: true,
+            usernameField: 'email',
+        },
+        async (req, username, password, done) => {
+            try {
+                const { email, firstname, lastname, age } = req.body
+                let user = await UserModel.findOne({ email: username })
+                if (user) {
+                    console.log('User already exists')
+                    return done(null, false)
+                }
                 
-    //             const newUser = {
-    //                 email,
-    //                 firstname,
-    //                 lastname,
-    //                 isAdmin: false,
-    //                 password: createHash(password),
-    //             };
-    //             let userCreated = await UserModel.create(newUser)
-    //             console.log(userCreated)
-    //             console.log('User Registration succesful')
-    //             return done(null, userCreated)
-    //         } catch (e) {
-    //             console.log('Error in register')
-    //             console.log(e)
-    //             return done(e)
-    //         }
-    //     }
-    //     )
-    // )
+                const createdCart = await create()
+                const { _id } = createdCart
+
+                const newUser = {
+                    email,
+                    firstname,
+                    lastname,
+                    age,
+                    cart: _id,
+                    password: createHash(password),
+                };
+                let userCreated = await UserModel.create(newUser)
+                console.log(userCreated)
+                console.log('User Registration succesful')
+                return done(null, userCreated)
+            } catch (e) {
+                console.log('Error in register')
+                console.log(e)
+                return done(e)
+            }
+        }
+        )
+    )
 
     // passport.use(
     //     'github',
@@ -133,7 +138,7 @@ export function iniPassport() {
     // );
 
     passport.use(
-        'jwt',
+        'current',
         new JWTStrategy(
             {
                 jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),

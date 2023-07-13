@@ -1,8 +1,12 @@
 import express from 'express'
 import passport from 'passport'
+import jwt from 'jsonwebtoken'
 import { UserModel } from './../dao/models/user.js';
 import { isUser, isAdmin } from '../middlewares/index.js';
 import { createHash, isValidPassword } from '../utils/index.js'
+import { checkAuth, passportCall } from "../middlewares/index.js";
+
+const SECRET = 'DiegoQuintero'
 
 export const authRouter = express.Router()
 
@@ -10,13 +14,31 @@ authRouter.get('/login', async (req, res) => {
     res.render('login', {})
 })
 
-authRouter.post('/login', passport.authenticate('login', { failureRedirect: '/auth/faillogin' }), async (req, res) => {
-    if (!req.user) {
-        return res.json({ error: 'invalid credentials' });
-    }
-    req.session.user = { _id: req.user._id, email: req.user.email, firstname: req.user.firstname, lastname: req.user.lastname, isAdmin: req.user.isAdmin };
+// authRouter.post('/login', passport.authenticate('login', { failureRedirect: '/auth/faillogin' }), async (req, res) => {
+//     if (!req.user) {
+//         return res.json({ error: 'invalid credentials' });
+//     }
+//     req.session.user = { _id: req.user._id, email: req.user.email, firstname: req.user.firstname, lastname: req.user.lastname, isAdmin: req.user.isAdmin };
 
-    return res.redirect('/products')
+//     return res.redirect('/products')
+// })
+
+authRouter.post('/login', async (req, res) => {
+    const { email, password } = req.body
+    const user =  await UserModel.findOne({ email: email })
+
+    if(email == user.email && isValidPassword(password, user.password)) {
+        const token = jwt.sign({ email, role: user.role}, SECRET, { expiresIn: '24h' })
+        console.log('Logueado')
+        return res.status(200).cookie('token', token, { maxAge: 60 * 60 * 1000, httpOnly: true })
+        .redirect('/products')
+    } else {
+        return res.status(400).json({
+        status: 'error',
+        msg: 'No se puede ingresar',
+        payload: {}
+        })
+    }
 })
 
 authRouter.get('/faillogin', async (req, res) => {
@@ -50,7 +72,9 @@ authRouter.post('/register', passport.authenticate('register', { failureRedirect
         idAdmin: req.user.isAdmin
     }
 
-    return res.json({ status: 'success', payload: req.user })
+    // return res.json({ status: 'success', payload: req.user })
+    // return res.redirect('/products');
+    return res.redirect('/auth/login')
 })
 
 authRouter.get('/failregister', async (req, res) => {
@@ -77,3 +101,8 @@ authRouter.get('/githubcallback', passport.authenticate('github', { failureRedir
     req.session.user = req.user;
     return res.redirect('/products');
 });
+
+authRouter.get('/current', passportCall('current'), checkAuth('user'), (req, res) => {
+    console.log('hola api')
+    res.send(req.user)
+})

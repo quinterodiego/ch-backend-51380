@@ -8,7 +8,7 @@ function handleLogin() {
     })
     .then((res) => res.json())
     .then((json) => {
-        alert('LOGUEADO')
+        console.log('LOGUEADO')
         // localStorage.setItem('token', json.payload)
     })
     .catch((error) => {
