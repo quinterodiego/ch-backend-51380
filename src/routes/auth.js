@@ -28,7 +28,7 @@ authRouter.post('/login', async (req, res) => {
     const user =  await UserModel.findOne({ email: email })
 
     if(email == user.email && isValidPassword(password, user.password)) {
-        const token = jwt.sign({ email, role: user.role}, SECRET, { expiresIn: '24h' })
+        const token = jwt.sign({ email, role: user.role, id: user._id, firstname: user.firstname, lastname: user.lastname, cart: user.cart}, SECRET, { expiresIn: '24h' })
         console.log('Logueado')
         return res.status(200).cookie('token', token, { maxAge: 60 * 60 * 1000, httpOnly: true })
         .redirect('/products')

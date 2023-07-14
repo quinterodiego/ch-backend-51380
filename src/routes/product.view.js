@@ -14,7 +14,7 @@ productRouterView.get('/', async (req, res) => {
     //     email: req.session.user.email,
     //     rol: req.session.user.isAdmin ? 'Admin' : 'Usuario'
     // }
-    // resp.userData = userData
-    // res.status(200).render('products', resp)
+    console.log(resp)
+    resp.userData = req.user
     res.status(200).render('products', resp)
 });

@@ -1,28 +1,27 @@
 const API_URL = 'http://localhost:8080/api'
 
-function handleLogin() {
-    fetch(API_URL + '/jwt-login', {
-        method: 'POST',
-        body: JSON.stringify({ email: 'd86webs@gmail.com', password: '123456'}),
-        headers: { 'Content-Type': 'application/json' }
+const getCurrentUser = () => {
+    // console.log("Get current user...");
+    fetch("http://localhost:8080/auth/current", {
+        method: "GET",
     })
     .then((res) => res.json())
-    .then((json) => {
-        console.log('LOGUEADO')
-        // localStorage.setItem('token', json.payload)
+    .then((user) => {
+        console.log("user", user);
+        const userData = document.getElementById('userData')
+        const template = `
+            <p class="h4 p-0 m-0">Bienvenido</p>
+            <p class="p-0 m-0">${user.firstname} ${user.lastname}</p>
+            <p class="p-0 m-0">${user.email}</p>
+        `
+        userData.innerHTML = template
     })
-    .catch((error) => {
-        console.log(error)
-    })
-}
+    .catch((err) => console.log(err));
+};
 
-function handleFetchProfile() {
-    fetch(API_URL + '/jwt-profile')
-    .then((res) => res.json())
-    .then((json) => {
-        console.log(json)
-    })
-    .catch((error) => {
-        console.log(error)
-    })
-}
+const init = () => {
+    getCurrentUser();
+    getAllProducts(5, 1, null, null);
+};
+
+init();
