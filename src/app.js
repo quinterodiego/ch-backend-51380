@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import passport from 'passport';
+import { Command } from "commander";
 
 import { __dirname, connectMongo } from "./utils/index.js"
 import { productRouter } from "./routes/product.js"
@@ -17,6 +18,20 @@ import { checkAuth, passportCall } from "./middlewares/index.js";
 
 const app = express();
 const PORT = 8080;
+const program = new Command()
+
+program
+  .option('-d', 'Variables para debug', false)
+  .option('-p <port>', 'Puerto del servidor', 8080)
+  .option('--mode <mode>', 'Modo de trabajo', 'production')
+  .requiredOption(
+    '-u <user>',
+    'Usuario que usa la app',
+    'No se ha declarado un usuario'
+  )
+  .option('-l, --letters [letters...]', 'Especificar letras')
+
+program.parse()
 
 connectMongo();
 
