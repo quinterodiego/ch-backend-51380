@@ -1,5 +1,4 @@
 import { CartModel } from './../DAO/models/cart.js';
-import { ProductModel } from './../DAO/models/product.js';
 
 export const create = async () => {
     const products = []

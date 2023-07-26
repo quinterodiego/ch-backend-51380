@@ -5,11 +5,10 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import passport from 'passport'
-import { Command } from "commander"
 
 import { __dirname, connectMongo } from "./utils/index.js"
-import { productRouter } from "./routes/product.js"
-import { productRouterView } from "./routes/product.view.js"
+import { productsRouter } from "./routes/products.js"
+import { productsRouterView } from "./routes/product.view.js"
 import cartRouter from "./routes/carts.js"
 import { cartRouterView } from "./routes/cart.view.js"
 import { authRouter } from './routes/auth.js'
@@ -18,24 +17,6 @@ import { checkAuth, passportCall } from "./middlewares/index.js"
 
 const app = express();
 const PORT = 8080;
-const program = new Command()
-
-program
-  .option('-d', 'Variables para debug', false)
-  .option('-p <port>', 'Puerto del servidor', 8080)
-  .option('--mode <mode>', 'Modo de trabajo', 'production')
-  .requiredOption(
-    '-u <user>',
-    'Usuario que usa la app',
-    'No se ha declarado un usuario'
-  )
-  .option('-l, --letters [letters...]', 'Especificar letras')
-
-program.parse()
-
-console.log('Options: ', program.opts())
-console.log('Valor de mode: ', program.opts().mode)
-console.log('Datos no reconocibles: ', program.args)
 
 connectMongo()
 
@@ -62,11 +43,11 @@ app.set("views", path.join(__dirname, "../views"))
 app.set("view engine", "handlebars")
 
 // ROUTES APIS
-app.use("/api/products", productRouter)
+app.use("/api/products", productsRouter)
 app.use("/api/carts", cartRouter);
 
 //ROUTES VIEWS
-app.use("/products", productRouterView)
+app.use("/products", productsRouterView)
 app.use("/carts", cartRouterView)
 app.use('/auth', authRouter)
 app.get('/', (_, res) =>  res.redirect('/auth/login'))

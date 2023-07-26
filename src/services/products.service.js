@@ -1,71 +1,76 @@
-import { ProductModel } from "../DAO/models/product.js";
+import { productModel } from "../models/products.model.js";
 
-export const getAll = async (limit, page, sort, category, stock) => {
+class ProductService {
 
-  const filters = {
-    page: page || 1,
-    limit: limit || 10,
-    sort: sort || ''
+  getAll = async (limit, page, sort, category, stock) => {
+
+    const filters = {
+      page: page || 1,
+      limit: limit || 10,
+      sort: sort || ''
+    }
+
+    let query = {}
+    category ? query.category = category : null
+    stock ? query.stock = { $gt: stock} : null
+    const resp = await productModel.getAll( query, filters)
+    
+    const paramLimit = limit ? `&limit=${limit}` : ''
+    const paramSort = sort ? `&sort=${sort}` : ''
+    const paramCategory = category ? `&category=${category}` : ''
+    const paramStock = stock ? `&stock=${stock}` : ''
+
+    const prevParams = new URLSearchParams(`${paramLimit}&page=${resp.prevPage}${paramSort}${paramCategory}${paramStock}`)
+    const nextParams = new URLSearchParams(`${paramLimit}&page=${resp.nextPage}${paramSort}${paramCategory}${paramStock}`)
+
+    resp.prevLink = resp.prevPage ? `?${prevParams}` : null
+    resp.nextLink = resp.nextPage ? `?${nextParams}` : null
+
+    const payload = resp.docs.map((item) => {
+      return {
+          _id: item._id, 
+          title: item.title,
+          description: item.description,
+          category: item.category,
+          thumbnail: item.thumbnail[0],
+          price: item.price,
+          code: item.code,
+          stock: item.stock,
+          status: item.status
+      };
+    });
+    const { docs, ...rest } = resp;
+
+    return { 
+        status: 'success', 
+        payload, 
+        pagination: rest 
+      }
   }
 
-  let query = {}
-  category ? query.category = category : null
-  stock ? query.stock = { $gt: stock} : null
-  const resp = await ProductModel.paginate( query, filters)
-  
-  const paramLimit = limit ? `&limit=${limit}` : ''
-  const paramSort = sort ? `&sort=${sort}` : ''
-  const paramCategory = category ? `&category=${category}` : ''
-  const paramStock = stock ? `&stock=${stock}` : ''
+  getById = async (id) => {
+    const resp = await productModel.getById(id)
+    return resp
+  }
 
-  const prevParams = new URLSearchParams(`${paramLimit}&page=${resp.prevPage}${paramSort}${paramCategory}${paramStock}`)
-  const nextParams = new URLSearchParams(`${paramLimit}&page=${resp.nextPage}${paramSort}${paramCategory}${paramStock}`)
+  create = async (product) => {
+    const resp = await productModel.create(product)
 
-  resp.prevLink = resp.prevPage ? `?${prevParams}` : null
-  resp.nextLink = resp.nextPage ? `?${nextParams}` : null
+    return resp
+  }
 
-  const payload = resp.docs.map((item) => {
-    return {
-        _id: item._id, 
-        title: item.title,
-        description: item.description,
-        category: item.category,
-        thumbnail: item.thumbnail[0],
-        price: item.price,
-        code: item.code,
-        stock: item.stock,
-        status: item.status
-    };
-  });
-  const { docs, ...rest } = resp;
+  update = async (id, updates) => {
+    const resp = await productModel.updateOne({ _id: id }, {$set: updates});
 
-  return { 
-      status: 'success', 
-      payload, 
-      pagination: rest 
-    }
+    return resp
+  }
+
+  deleteProduct = async (id) => {
+    const resp = await productModel.deleteOne({ _id: id})
+
+    return resp
+  }
+
 }
 
-export const getById = async (id) => {
-    const product = await ProductModel.findOne({_id: id})
-
-    return product
-}
-
-export const create = async (product) => {
-  const resp = await ProductModel.create(product)
-
-  return resp
-}
-
-export const update = async (id, updates) => {
-  const resp = await ProductModel.updateOne({ _id: id }, {$set: updates});
-
-  return resp
-}
-
-export const deleteProduct = async (id) => {
-  const resp = await ProductModel.deleteOne({ _id: id})
-
-  return resp
-}
+export const productService = new ProductService()

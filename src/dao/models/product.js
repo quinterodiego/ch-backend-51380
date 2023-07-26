@@ -15,4 +15,4 @@ const schema = new Schema({
 
 schema.plugin(monsoosePaginate);
 
-export const ProductModel = model('products', schema);
+export const ProductMongoDBModel = model('products', schema);
