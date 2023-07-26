@@ -60,13 +60,13 @@ class ProductService {
   }
 
   update = async (id, updates) => {
-    const resp = await productModel.updateOne({ _id: id }, {$set: updates});
+    const resp = await productModel.update(id, updates);
 
     return resp
   }
 
-  deleteProduct = async (id) => {
-    const resp = await productModel.deleteOne({ _id: id})
+  delete = async (id) => {
+    const resp = await productModel.delete(id)
 
     return resp
   }

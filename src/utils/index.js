@@ -8,7 +8,7 @@ import { connect } from 'mongoose';
 
 export const connectMongo = async () => {
   try {
-    await connect('mongodb+srv://d86webs:Diego859@cluster0.ahna6cz.mongodb.net/ecommerce');
+    await connect(process.env.MONGO_URL);
     console.log('--** Connected database **--')
   } catch (e) {
     console.log(e);

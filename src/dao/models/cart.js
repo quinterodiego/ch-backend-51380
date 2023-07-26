@@ -9,4 +9,4 @@ const schema = new Schema({
     products: [productSchema]
 }, { versionKey: false })
 
-export const CartModel = model('carts', schema)
+export const CartMongoDBModel = model('carts', schema)
