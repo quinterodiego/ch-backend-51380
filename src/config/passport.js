@@ -3,7 +3,7 @@ import local from 'passport-local'
 import jwt from 'passport-jwt'
 
 import { createHash } from '../utils/index.js';
-import { UserModel } from '../dao/models/user.js'
+import { UserModel } from '../dao/database/models/user.js'
 import { cartController } from '../controllers/carts.controller.js';
 
 const LocalStrategy = local.Strategy

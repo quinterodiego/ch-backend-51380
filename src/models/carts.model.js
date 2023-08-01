@@ -1,4 +1,4 @@
-import { CartMongoDBModel } from "../DAO/models/cart.js";
+import { CartMongoDBModel } from "../dao/database/models/cart.js";
 
 class CartModel {
 

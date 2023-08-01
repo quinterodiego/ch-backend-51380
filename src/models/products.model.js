@@ -1,4 +1,4 @@
-import { ProductMongoDBModel } from "../DAO/models/product.js";
+import { ProductMongoDBModel } from "../dao/database/models/product.js";
 
 class ProductModel {
 

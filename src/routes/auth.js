@@ -1,7 +1,7 @@
 import express from 'express'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
-import { UserModel } from './../dao/models/user.js';
+import { UserModel } from '../dao/database/models/user.js';
 import { isUser, isAdmin } from '../middlewares/index.js';
 import { createHash, isValidPassword } from '../utils/index.js'
 import { checkAuth, passportCall } from "../middlewares/index.js";
