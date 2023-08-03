@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-class ProductsManager {
+class Products {
     constructor (path) {
         this.path = path
     }
@@ -95,4 +95,4 @@ class ProductsManager {
     }
 }
 
-export default ProductsManager
+export default Products

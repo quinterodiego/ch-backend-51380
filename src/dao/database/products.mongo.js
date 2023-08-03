@@ -1,6 +1,6 @@
-import { ProductMongoDBModel } from "../dao/database/models/products.model.js";
+import { ProductMongoDBModel } from "./models/products.model.js";
 
-class ProductModel {
+class Products {
 
     getAll = async (query, filters) => {
         const resp = await ProductMongoDBModel.paginate( query, filters)
@@ -30,4 +30,4 @@ class ProductModel {
     }
 }
 
-export const productModel = new ProductModel()
+export const products = new Products()
