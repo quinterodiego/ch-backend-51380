@@ -2,6 +2,15 @@ import { productService } from './../services/products.service.js';
 
 class ProductController {
     
+    create =  async (req, res) => {
+        const product = req.body
+        const resp = await productService.create(product)
+        res.status(200).send({
+            "status": "success",
+            "payload": resp
+        })
+    }
+    
     getAll = async (req, res) => {
         const { limit, page, sort, category, stock } = req.query
         const products = await productService.getAll(limit, page, sort, category, stock)
@@ -11,14 +20,7 @@ class ProductController {
             payload: products
         })
     }
-
-    getAllForView = async (req, res) => {
-        const { limit, page, sort, category, stock } = req.query
-        const resp = await productService.getAll(limit, page, sort, category, stock)
-        resp.userData = req.user
-        res.status(200).render('products', resp)
-    }
-
+    
     getById = async (req, res) => {
         const id = req.params.pid
 
@@ -34,13 +36,11 @@ class ProductController {
         }
     }
 
-    create =  async (req, res) => {
-        const product = req.body
-        const resp = await productService.create(product)
-        res.status(200).send({
-            "status": "success",
-            "payload": resp
-        })
+    getAllForView = async (req, res) => {
+        const { limit, page, sort, category, stock } = req.query
+        const resp = await productService.getAll(limit, page, sort, category, stock)
+        resp.userData = req.user
+        res.status(200).render('products', resp)
     }
 
     update = async (req, res) => {

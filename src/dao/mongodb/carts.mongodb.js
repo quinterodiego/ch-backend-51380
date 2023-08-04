@@ -1,11 +1,10 @@
-import { CartMongoDBModel } from "../dao/database/models/cart.js";
+import { CartMongoDBModel } from './models/carts.model.js';
 
 class CartModel {
 
     create = async () => {
         const products = []
         const resp = await CartMongoDBModel.create({products})
-    
         return resp
     }
 
@@ -27,7 +26,6 @@ class CartModel {
                 "quantity": prod.quantity
             }
         })
-
         return products
     }
 
@@ -62,13 +60,11 @@ class CartModel {
 
     deleteProducts = async (idCart) => {
         const resp = await CartMongoDBModel.findByIdAndUpdate(idCart, { products: []}, { new: true })
-    
         return resp
     }
 
     updateProducts = async (idCart, products) => {
         const resp = await CartMongoDBModel.findByIdAndUpdate(idCart, { products: products}, { new: true })
-    
         return resp
     }
     

@@ -2,7 +2,7 @@ import { cartService } from "../services/carts.service.js";
 
 class CartController {
 
-    createCart = async (req, res) => {
+    create = async (req, res) => {
         const resp = await cartService.create()
         res.status(201).send({
             "status": "success",

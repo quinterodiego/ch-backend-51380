@@ -3,8 +3,8 @@ import local from 'passport-local'
 import jwt from 'passport-jwt'
 
 import { createHash } from '../utils/index.js';
-import { UserModel } from '../dao/database/models/user.js'
-import { cartController } from '../controllers/carts.controller.js';
+import { UserModel } from '../dao/mongodb/models/user.js'
+// import { cartController } from '../controllers/carts.controller.js';
 
 const LocalStrategy = local.Strategy
 const JWTStrategy = jwt.Strategy
@@ -37,16 +37,16 @@ export function iniPassport() {
                     console.log('User already exists')
                     return done(null, false)
                 }
-                
-                const createdCart = await cartController.createCart()
-                const { _id } = createdCart
+                // const createdCart = await cartController.create()
+                // console.log('Cart creado!! ', createdCart)
+                // const { _id } = createdCart
 
                 const newUser = {
                     email,
                     firstname,
                     lastname,
                     age,
-                    cart: _id,
+                    // cart: _id,
                     password: createHash(password),
                 };
                 let userCreated = await UserModel.create(newUser)

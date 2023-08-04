@@ -2,7 +2,7 @@ import express from 'express'
 import { cartController } from '../controllers/carts.controller.js'
 const cartRouter = express.Router()
 
-cartRouter.post('/', cartController.createCart)
+cartRouter.post('/', cartController.create)
 
 cartRouter.get('/:cid', cartController.getById)
 

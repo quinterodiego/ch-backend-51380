@@ -13,7 +13,7 @@ class Products {
         return id
     }
 
-    async addProduct(product) {
+    async create(product) {
         try {
             if(product.title && product.description && product.price && product.thumbnail && product.code && product.stock && product.category) {
                 const data = await fs.promises.readFile(this.path, 'utf-8')
@@ -43,7 +43,7 @@ class Products {
         }
     }
 
-    async getProducts() {
+    async getAll() {
         try {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const products = await JSON.parse(data)
@@ -53,7 +53,7 @@ class Products {
         }
     }
 
-    async getProductById(id) {
+    async getById(id) {
         try {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const products = await JSON.parse(data)
@@ -68,7 +68,7 @@ class Products {
         }
     }
 
-    async updateProduct(id, updates) {
+    async update(id, updates) {
         try {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const products = await JSON.parse(data)
@@ -82,7 +82,7 @@ class Products {
         }
     }
 
-    async deleteProduct(id) {
+    async delete(id) {
         try {            
             const data = await fs.promises.readFile(this.path, 'utf-8')
             const products = await JSON.parse(data)

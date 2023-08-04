@@ -2,6 +2,11 @@ import { ProductMongoDBModel } from "./models/products.model.js";
 
 class Products {
 
+    create = async (product) => {
+        const resp = await ProductMongoDBModel.create(product)
+        return resp
+    }
+
     getAll = async (query, filters) => {
         const resp = await ProductMongoDBModel.paginate( query, filters)
         return resp
@@ -10,11 +15,6 @@ class Products {
     getById = async (id) => {
         const product = await ProductMongoDBModel.findOne({_id: id})
         return product
-    }
-
-    create = async (product) => {
-        const resp = await ProductMongoDBModel.create(product)
-        return resp
     }
 
     update = async (id, updates) => {

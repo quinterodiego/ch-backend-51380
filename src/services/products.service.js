@@ -2,6 +2,11 @@ import { productModel } from "../models/products.model.js";
 
 class ProductService {
 
+  create = async (product) => {
+    const resp = await productModel.create(product)
+    return resp
+  }
+
   getAll = async (limit, page, sort, category, stock) => {
 
     const filters = {
@@ -50,12 +55,6 @@ class ProductService {
 
   getById = async (id) => {
     const resp = await productModel.getById(id)
-    return resp
-  }
-
-  create = async (product) => {
-    const resp = await productModel.create(product)
-
     return resp
   }
 

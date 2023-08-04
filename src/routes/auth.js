@@ -1,7 +1,7 @@
 import express from 'express'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
-import { UserModel } from '../dao/database/models/user.js';
+import { UserModel } from '../dao/mongodb/models/user.js';
 import { isUser, isAdmin } from '../middlewares/index.js';
 import { createHash, isValidPassword } from '../utils/index.js'
 import { checkAuth, passportCall } from "../middlewares/index.js";
@@ -26,7 +26,6 @@ authRouter.get('/login', async (req, res) => {
 authRouter.post('/login', async (req, res) => {
     const { email, password } = req.body
     const user =  await UserModel.findOne({ email: email })
-
     if(email == user.email && isValidPassword(password, user.password)) {
         const token = jwt.sign({ email, role: user.role, id: user._id, firstname: user.firstname, lastname: user.lastname, cart: user.cart}, SECRET, { expiresIn: '24h' })
         console.log('Logueado')
