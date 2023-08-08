@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from "express"
 import handlebars from "express-handlebars"
 import path from "path"
@@ -62,5 +63,5 @@ app.get("*", (req, res) => {
 
 // LISTEN
 app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`)
+  console.log(`Server listening on PORT:${PORT}`)
 });

@@ -1,9 +1,11 @@
-import { productModel } from "../models/products.model.js";
+import { Product } from "./../dao/factory.js";
+const productDAO = new Product()
 
 class ProductService {
 
   create = async (product) => {
-    const resp = await productModel.create(product)
+    console.log(product)
+    const resp = await productDAO.create(product)
     return resp
   }
 
@@ -18,7 +20,7 @@ class ProductService {
     let query = {}
     category ? query.category = category : null
     stock ? query.stock = { $gt: stock} : null
-    const resp = await productModel.getAll( query, filters)
+    const resp = await productDAO.getAll( query, filters)
     
     const paramLimit = limit ? `&limit=${limit}` : ''
     const paramSort = sort ? `&sort=${sort}` : ''
@@ -54,18 +56,18 @@ class ProductService {
   }
 
   getById = async (id) => {
-    const resp = await productModel.getById(id)
+    const resp = await productDAO.getById(id)
     return resp
   }
 
   update = async (id, updates) => {
-    const resp = await productModel.update(id, updates);
+    const resp = await productDAO.update(id, updates);
 
     return resp
   }
 
   delete = async (id) => {
-    const resp = await productModel.delete(id)
+    const resp = await productDAO.delete(id)
 
     return resp
   }

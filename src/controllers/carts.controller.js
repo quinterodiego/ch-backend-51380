@@ -59,11 +59,11 @@ class CartController {
         })
     }
 
-    updateProducts = async (req, res) => {
+    updateQuantity = async (req, res) => {
         const idCart = req.params.cid
         const idProduct = req.params.pid
         const quantity = req.body.quantity
-        const resp = await cartService.updateProducts(idCart, idProduct, quantity)
+        const resp = await cartService.updateQuantity(idCart, idProduct, quantity)
         
         res.status(201).send({
             "status": "success",
@@ -71,9 +71,9 @@ class CartController {
         })
     }
 
-    updateQuantity = async (req, res) => {
+    updateProducts = async (req, res) => {
         const idCart = req.params.cid
-        const resp = await cartService.updateQuantity(idCart)
+        const resp = await cartService.updateProducts(idCart)
         
         res.status(201).send({
             "status": "success",

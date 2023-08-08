@@ -1,9 +1,16 @@
-<div class="d-flex justify-content-around align-items-center pt-2">
+<div class="container d-flex justify-content-between align-items-center pt-2">
     <div class="w-25 d-flex flex-column text-white" role="alert" id="userData">
     </div>
     <h1 class="text-white text-center p-5">PRODUCTOS</h1>
-    <div class="w-25 d-flex" role="alert">
-        <a href="/auth/logout" class="btn btn-danger m-auto">Logout</a>
+    <div class="w-25 d-flex justify-content-end gap-5" role="alert">
+        <a class="btn text-decoration-none" onclick="cartView()">
+            <div class="cart d-flex justify-content-center align-items-center">
+                    <span class="text-white h6 p-0 m-0 m-2" id="cartQuantity"></span>
+                    <i class="fa-solid fa-cart-shopping text-white h3 m-0">
+                    </i>
+            </div>
+        </a>
+        <a href="/auth/logout" class="btn btn-primary">Logout</a>
     </div>
 </div>
 
@@ -35,12 +42,13 @@
 
 <div class="cards_container d-flex flex-wrap justify-content-center gap-3">
     {{#each payload}}
-    <div class="card bg-dark text-white" style="width: 18rem;">
+    <div class="card bg-secondary text-white" style="width: 18rem;">
         <img src="{{this.thumbnail}}" class="card-img-top" alt="...">
         <div class="card-body h-50">
             <h5 class="card-title h3">{{this.title}}</h5>
             <p class="card-text">{{this.description}}</p>
             <p class="card-text h4">${{this.price}}</p>
+            <p class="card-text">{{this._id}}</p>
             <button class="btn btn-primary">Agregar al carrito</button>
         </div>
     </div>

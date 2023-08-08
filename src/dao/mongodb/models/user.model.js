@@ -10,7 +10,10 @@ const schema = new Schema({
     email: { type: String, required: true, unique: true },
     age: { type: Number, required: true },
     password: { type: String, required: true, max: 100 },
-    cart: [cartSchema],
+    cart: {
+        type: Schema.Types.ObjectId,
+        ref: 'carts'
+    },
     role: {
         type: String,
         default: "user",

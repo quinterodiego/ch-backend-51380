@@ -1,9 +1,9 @@
 import express from 'express'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
-import { UserModel } from '../dao/mongodb/models/user.js';
+import { userService } from './../services/user.service.js'
 import { isUser, isAdmin } from '../middlewares/index.js';
-import { createHash, isValidPassword } from '../utils/index.js'
+import { isValidPassword } from '../utils/index.js'
 import { checkAuth, passportCall } from "../middlewares/index.js";
 
 const SECRET = 'DiegoQuintero'
@@ -25,17 +25,17 @@ authRouter.get('/login', async (req, res) => {
 
 authRouter.post('/login', async (req, res) => {
     const { email, password } = req.body
-    const user =  await UserModel.findOne({ email: email })
-    if(email == user.email && isValidPassword(password, user.password)) {
+    const user =  await userService.findByEmail(email)
+    if(user && email == user.email && isValidPassword(password, user.password)) {
         const token = jwt.sign({ email, role: user.role, id: user._id, firstname: user.firstname, lastname: user.lastname, cart: user.cart}, SECRET, { expiresIn: '24h' })
         console.log('Logueado')
         return res.status(200).cookie('token', token, { maxAge: 60 * 60 * 1000, httpOnly: true })
         .redirect('/products')
     } else {
         return res.status(400).json({
-        status: 'error',
-        msg: 'No se puede ingresar',
-        payload: {}
+            status: 'error',
+            msg: 'No se puede ingresar',
+            payload: {}
         })
     }
 })
@@ -102,6 +102,5 @@ authRouter.get('/githubcallback', passport.authenticate('github', { failureRedir
 });
 
 authRouter.get('/current', passportCall('current'), checkAuth('user'), (req, res) => {
-    console.log('hola api')
     res.send(req.user)
 })

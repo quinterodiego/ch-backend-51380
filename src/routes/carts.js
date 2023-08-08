@@ -10,10 +10,10 @@ cartRouter.post('/:cid/products/:pid', cartController.addProduct)
 
 cartRouter.delete('/:cid/products/:pid', cartController.deleteProduct)
 
-cartRouter.put('/:cid', cartController.deleteProducts)
+cartRouter.delete('/:cid', cartController.deleteProducts)
 
-cartRouter.put('/:cid/products/:pid', cartController.updateProducts)
+cartRouter.put('/:cid', cartController.updateProducts)
 
-cartRouter.delete('/:cid', cartController.updateQuantity)
+cartRouter.put('/:cid/products/:pid', cartController.updateQuantity)
 
 export default cartRouter

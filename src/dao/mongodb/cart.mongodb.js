@@ -1,6 +1,6 @@
-import { CartMongoDBModel } from './models/carts.model.js';
+import { CartMongoDBModel } from './models/cart.model.js';
 
-class CartModel {
+export default class Cart {
 
     create = async () => {
         const products = []
@@ -78,11 +78,9 @@ class CartModel {
         } else {
             const oldProducts = cart.products
             const index = oldProducts.findIndex(product => product.product.toString() === idProduct)
-            oldProducts[index].quantity = quantity
+            oldProducts[index].quantity += quantity
             resp = await CartMongoDBModel.findByIdAndUpdate(idCart, { products: oldProducts}, { new: true })
             return resp
         }
     }
 }
-
-export const cartModel = new CartModel()

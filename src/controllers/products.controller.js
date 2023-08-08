@@ -14,7 +14,6 @@ class ProductController {
     getAll = async (req, res) => {
         const { limit, page, sort, category, stock } = req.query
         const products = await productService.getAll(limit, page, sort, category, stock)
-
         return res.json({
             status: 'success',
             payload: products
@@ -23,9 +22,7 @@ class ProductController {
     
     getById = async (req, res) => {
         const id = req.params.pid
-
         const product = await productService.getById(id)
-
         if(product) {
             res.status(200).send({ 
                 "status": "success",
@@ -45,10 +42,8 @@ class ProductController {
 
     update = async (req, res) => {
         const id = req.params.pid
-        const updates = req.body
-        
+        const updates = req.body    
         const resp = await productService.update(id, updates)
-
         res.status(201).send({
             "status": "success",
             "message": resp

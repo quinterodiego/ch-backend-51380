@@ -1,9 +1,12 @@
-import { ProductMongoDBModel } from "./models/products.model.js";
+import { ProductMongoDBModel } from "./models/product.model.js";
+import ProductDTO from '../DTO/product.dto.js'
 
-class Products {
+export default class ProductMongoDB {
+    // constructor() {}
 
     create = async (product) => {
-        const resp = await ProductMongoDBModel.create(product)
+        const productDTO = new ProductDTO(product)
+        const resp = await ProductMongoDBModel.create(productDTO)
         return resp
     }
 
@@ -19,15 +22,11 @@ class Products {
 
     update = async (id, updates) => {
         const resp = await ProductMongoDBModel.updateOne({ _id: id }, {$set: updates});
-    
         return resp
     }
 
     delete = async (id) => {
         const resp = await ProductMongoDBModel.deleteOne({ _id: id})
-    
         return resp
     }
 }
-
-export const products = new Products()
