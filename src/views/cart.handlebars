@@ -1,18 +1,31 @@
-<h1 class="text-white text-center p-5">CARRITO</h1>
+<div class="container text-center">
+    <h1 class="text-white text-center p-5">TU CARRITO</h1>
 
-<div class="cards_container d-flex flex-column align-items-center">
-    {{#each payload}}
-    <div class="card bg-dark text-white flex-row mb-3" style="height:250px; width: 30%;">
-        <img src="{{this.thumbnail}}" class="card-img-top" style="width: 40%;" alt="...">
-        <div class="card-body d-flex flex-column justify-content-center">
-            <h5 class="card-title h3">{{this.title}}</h5>
-            <p class="card-text h4">${{this.price}}</p>
-            <div class="quantity d-flex justify-content-between pb-3">
-                <p class="card-text h4 m-0">Cantidad:</p> 
-                <input class="w-25 text-center" type="number" min="1" value="{{this.quantity}}">
+    <button class="btn btn-primary" onclick="back()">Volver</button>
+
+    <div class="row">
+        <div class="cards_container d-flex flex-column align-items-center pt-5 col-sm">
+            {{#each payload}}
+            <div class="card bg-dark text-white flex-row mb-3" style="height:250px;">
+                <img src="{{this.thumbnail}}" class="card-img-top" style="width: 50%;" alt="...">
+                <div class="card-body d-flex flex-column justify-content-center bg-secondary align-items-center w-50">
+                    <h5 class="card-title h3">{{this.title}}</h5>
+                    <p class="card-text h5">${{this.price}}</p>
+                    <div class="quantity d-flex justify-content-between pb-3">
+                        <p class="card-text h5 m-0">Cantidad:</p> 
+                        <input class="w-25 text-center" type="number" min="1" value="{{this.quantity}}">
+                    </div>
+                    <button class="btn btn-danger">Eliminar</button>
+                </div>
             </div>
-            <a href="#" class="btn btn-danger w-50">Eliminar</a>
+            {{/each}}
+        </div>
+
+        <div class="order col-sm text-white">
+            <h3 class="h3">TU ORDEN</h3>
+            <p id="total"></p>
         </div>
     </div>
-    {{/each}}
 </div>
+
+<script src="http://localhost:8080/cartView.js"></script>
