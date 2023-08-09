@@ -1,4 +1,5 @@
 import { cartService } from "../services/carts.service.js";
+import { cartService } from './../services/carts.service';
 
 class CartController {
 
@@ -81,6 +82,10 @@ class CartController {
         })
     }
 
+    purchase = async (req, res) => {
+        const idCart = req.params.cid
+        const resp = await cartService.purchase(idCart)
+    }
 }
 
 export const cartController = new CartController()

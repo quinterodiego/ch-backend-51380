@@ -48,8 +48,9 @@ const renderCartIconLength = (quantity) => {
     cartQuantity.innerHTML = quantity
 }
 
-const renderProducts = (products) => {
-
+const renderProducts = (data) => {
+    console.log(data)
+    const { payload: products } = data.payload
     const productsList = document.getElementById('productsList')
     productsList.innerHTML = ''
     products.map(prod => {
@@ -72,10 +73,7 @@ const getProducts = () => {
 
     fetch('http://localhost:8080/api/products', { method: 'GET' })
     .then(resp => resp.json())
-    .then(data => {
-        const prods = data.payload.payload
-        renderProducts(prods)
-    })
+    .then(data => renderProducts(data))
 
 }
 

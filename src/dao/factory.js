@@ -15,6 +15,8 @@ switch (config.persistence) {
         Cart = CartMongoDB
         const { default: UserMongoDB } = await import('./mongodb/user.mongodb.js')
         User = UserMongoDB
+        const { default: TicketMongoDB } = await import('./mongodb/ticket.mongodb.js')
+        Ticket = TicketMongoDB
         break;
 
     case 'MEMORY':

@@ -16,4 +16,6 @@ cartRouter.put('/:cid', cartController.updateProducts)
 
 cartRouter.put('/:cid/products/:pid', cartController.updateQuantity)
 
+cartRouter.get('/:cid/purchase', cartController.purchase)
+
 export default cartRouter

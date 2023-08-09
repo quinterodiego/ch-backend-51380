@@ -1,11 +1,11 @@
 const getProductsFromCart = () => {
 
-    const idCart = JSON.parse(localStorage.getItem(idCart))
+    const idCart = JSON.parse(localStorage.getItem('idCart'))
     fetch('http://localhost:8080/api/carts/' + idCart, {
         method: 'GET'
     })
     .then((res) => res.json())
-    .then(console.log(res))
+    .then(data => getTotal(data.payload))
 }
 
 const back = () => {
@@ -13,4 +13,15 @@ const back = () => {
     window.location.href = '/products'
 }
 
-getProductsFromCart()
+const getTotal = (products) => {
+    const total = document.getElementById('total')
+    total.innerHTML = ''
+    const sum = products.reduce((acc, currentValue) => {return acc + currentValue.price}, 0)
+    total.innerHTML = `Total: $${sum}`
+}
+
+const init = () => {
+    getProductsFromCart()
+}
+
+init()
